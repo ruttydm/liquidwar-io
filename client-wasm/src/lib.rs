@@ -32,10 +32,10 @@ pub fn create_game() {
 }
 
 #[wasm_bindgen]
-pub fn add_player(player_id: u32) {
+pub fn add_player(player_id: u32, total_teams: u32) {
     GAME.with(|g| {
         if let Some(ref mut state) = *g.borrow_mut() {
-            state.add_player(player_id as usize);
+            state.add_player(player_id as usize, total_teams as usize);
         }
     });
 }

@@ -1,0 +1,9 @@
+target/
+node_modules/
+dist/
+client-wasm/pkg/
+docs-site/target/
+.git/
+.claude/
+tmp/
+*.md

@@ -1,3 +1,4 @@
+pub mod autoplay;
 pub mod constants;
 pub mod cursor;
 pub mod fighter;

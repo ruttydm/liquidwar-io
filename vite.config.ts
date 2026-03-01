@@ -7,4 +7,10 @@ export default defineConfig({
   build: {
     target: "esnext",
   },
+  server: {
+    proxy: {
+      "/docs": "http://127.0.0.1:3002",
+      "/pkg": "http://127.0.0.1:3002",
+    },
+  },
 });

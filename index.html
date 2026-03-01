@@ -3,7 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Liquid War</title>
+    <title>LiquidWar.io — Online Multiplayer Territory Game</title>
+
+    <!-- SEO -->
+    <meta name="description" content="LiquidWar.io — the classic multiplayer territory game. Control your liquid army with a cursor and conquer the map. Play solo or online." />
+    <meta name="theme-color" content="#000020" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LiquidWar.io — Online Multiplayer Territory Game" />
+    <meta property="og:description" content="LiquidWar.io — Control your liquid army with a cursor and conquer the map. Play solo against AI or online with friends." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="LiquidWar.io — Online Multiplayer Territory Game" />
+    <meta name="twitter:description" content="LiquidWar.io — Control your liquid army with a cursor and conquer the map. Play solo against AI or online with friends." />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoGame",
+      "name": "LiquidWar.io",
+      "description": "LiquidWar.io — The classic multiplayer territory conquest game. Control your liquid army with a cursor and conquer the map.",
+      "genre": ["Strategy", "Multiplayer"],
+      "gamePlatform": "Web Browser",
+      "applicationCategory": "Game",
+      "operatingSystem": "Any",
+      "playMode": ["SinglePlayer", "MultiPlayer"],
+      "numberOfPlayers": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 32 },
+      "image": "/og-image.png",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -21,21 +62,6 @@
       }
       canvas { display: block; cursor: none; }
       canvas.hidden { display: none; }
-
-      /* Scoreboard */
-      #scoreboard {
-        position: fixed;
-        top: 8px;
-        right: 8px;
-        color: white;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 10px;
-        background: rgba(0, 0, 0, 0.7);
-        padding: 6px 12px;
-        border-radius: 4px;
-        z-index: 10;
-      }
-      #scoreboard.hidden { display: none; }
 
       /* Menu root */
       #menu-root {
@@ -68,7 +94,7 @@
       }
       .menu-btn {
         display: block;
-        width: 200px;
+        width: 220px;
         padding: 10px;
         margin: 4px;
         background: rgba(0, 0, 40, 0.85);
@@ -95,28 +121,41 @@
         color: #fff;
       }
 
-      .quick-btns {
-        position: fixed;
-        bottom: 12px;
-        right: 12px;
+      /* Name input on main menu */
+      .name-row {
         display: flex;
-        gap: 6px;
-        z-index: 101;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
       }
-      .quick-btn {
-        padding: 6px 12px;
+      .name-row label { font-size: 9px; color: #888; }
+      .name-row input {
+        width: 140px;
+        padding: 6px 8px;
+        background: rgba(0, 0, 30, 0.9);
+        border: 2px solid #334;
+        border-radius: 4px;
+        color: #e0e0e0;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 9px;
+        outline: none;
+      }
+      .name-row input:focus { border-color: #4287f5; }
+
+      /* Generic back button */
+      .back-btn {
+        margin-top: 12px;
+        padding: 6px 16px;
         background: rgba(0, 0, 30, 0.8);
         border: 1px solid #334;
         color: #888;
         font-family: 'Press Start 2P', monospace;
-        font-size: 8px;
+        font-size: 9px;
         cursor: pointer;
       }
-      .quick-btn:hover { border-color: #4287f5; color: #ccc; }
+      .back-btn:hover { border-color: #4287f5; color: #ccc; }
 
-      /* Map selection */
-      #menu-map { width: 100%; max-width: 1000px; max-height: 100vh; overflow-y: auto; padding: 20px; }
-      #menu-map h2 { font-size: 14px; color: #6ab0ff; margin-bottom: 12px; text-shadow: 1px 1px 0 #000; }
+      /* Search input */
       .search {
         width: 280px;
         padding: 6px 10px;
@@ -130,7 +169,9 @@
         outline: none;
       }
       .search:focus { border-color: #4287f5; }
-      #map-grid {
+
+      /* Map grid (used in sp-map and lobby) */
+      .map-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
         gap: 8px;
@@ -148,6 +189,7 @@
         transition: border-color 0.1s, transform 0.1s;
       }
       .map-card:hover { border-color: #4287f5; transform: translateY(-2px); }
+      .map-card.selected { border-color: #4287f5; background: rgba(30, 40, 80, 0.9); }
       .map-card img {
         width: 100%;
         aspect-ratio: 4/3;
@@ -164,39 +206,264 @@
         text-overflow: ellipsis;
         text-align: center;
       }
-      .back-btn {
-        margin-top: 12px;
-        padding: 6px 16px;
-        background: rgba(0, 0, 30, 0.8);
+
+      /* Single player setup */
+      #menu-sp-map { width: 100%; max-width: 1000px; max-height: 100vh; overflow-y: auto; padding: 20px; }
+      #menu-sp-map h2 { font-size: 14px; color: #6ab0ff; margin-bottom: 12px; text-shadow: 1px 1px 0 #000; }
+      .sp-layout { display: flex; gap: 16px; width: 100%; margin-bottom: 12px; }
+      .sp-left { flex: 1; min-width: 280px; }
+      .sp-right { flex: 2; }
+
+      /* Team slots */
+      .sp-section { margin-bottom: 12px; }
+      .sp-section h3 { font-size: 9px; color: #888; margin-bottom: 8px; }
+      #sp-team-slots { max-height: 240px; overflow-y: auto; }
+      .sp-team-slot {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 4px;
+        padding: 4px 8px;
+        background: rgba(0, 0, 30, 0.7);
+        border: 1px solid #223;
+        border-radius: 3px;
+      }
+      .sp-team-color { width: 12px; height: 12px; border-radius: 2px; border: 1px solid #555; flex-shrink: 0; }
+      .sp-team-mode {
+        background: rgba(0, 0, 40, 0.9);
         border: 1px solid #334;
         color: #888;
         font-family: 'Press Start 2P', monospace;
+        font-size: 7px;
+        padding: 4px 6px;
+        width: 56px;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        text-transform: uppercase;
+        transition: border-color 0.1s, color 0.1s;
+      }
+      .sp-team-mode:hover { border-color: #4287f5; color: #ccc; }
+      .sp-team-mode[data-mode="human"] { border-color: #42f560; color: #42f560; }
+      .sp-team-mode[data-mode="cpu"] { border-color: #f5d742; color: #f5d742; }
+      .sp-team-mode[data-mode="off"] { border-color: #334; color: #555; }
+      .sp-team-slot input[type="text"] {
+        background: rgba(0, 0, 20, 0.9);
+        border: 1px solid #334;
+        color: #ccc;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 7px;
+        padding: 3px 4px;
+        width: 90px;
+      }
+
+      /* Dynamic team slot buttons */
+      .sp-add-slot {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        margin-top: 4px;
+        background: rgba(0, 0, 30, 0.5);
+        border: 1px dashed #334;
+        border-radius: 3px;
+        color: #555;
+        font-size: 8px;
+        cursor: pointer;
+        transition: border-color 0.1s, color 0.1s;
+      }
+      .sp-add-slot:hover { border-color: #4287f5; color: #6ab0ff; }
+      .sp-remove-slot {
+        color: #555;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 0 4px;
+        line-height: 1;
+        margin-left: auto;
+      }
+      .sp-remove-slot:hover { color: #f54242; }
+
+      /* Vanilla/custom toggle */
+      .vanilla-row { display: flex; gap: 4px; }
+      .vanilla-btn {
+        padding: 4px 10px;
+        background: rgba(0, 0, 40, 0.9);
+        border: 1px solid #334;
+        color: #888;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 7px;
+        cursor: pointer;
+        transition: border-color 0.1s, color 0.1s;
+      }
+      .vanilla-btn.active { border-color: #42f560; color: #42f560; }
+      .vanilla-btn:hover { border-color: #4287f5; color: #ccc; }
+      .rule-row.disabled { opacity: 0.35; pointer-events: none; }
+
+      /* Mode badge in browse */
+      .mode-badge {
+        font-size: 7px;
+        padding: 2px 6px;
+        border-radius: 2px;
+      }
+      .mode-badge.vanilla { background: rgba(66, 245, 96, 0.15); color: #42f560; }
+      .mode-badge.custom { background: rgba(245, 215, 66, 0.15); color: #f5d742; }
+
+      /* Rule sliders */
+      .rule-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        font-size: 8px;
+        color: #aaa;
+      }
+      .rule-row input[type="range"] { width: 90px; accent-color: #4287f5; }
+      .rule-row .rule-val { color: #6ab0ff; font-size: 8px; min-width: 16px; text-align: right; }
+
+      /* Multiplayer submenu */
+      #menu-multiplayer h2 { font-size: 14px; color: #6ab0ff; margin-bottom: 20px; text-shadow: 1px 1px 0 #000; }
+
+      /* Join room */
+      #menu-join h2 { font-size: 14px; color: #6ab0ff; margin-bottom: 20px; text-shadow: 1px 1px 0 #000; }
+      .code-input {
+        width: 160px;
+        padding: 10px;
+        background: rgba(0, 0, 30, 0.9);
+        border: 2px solid #334;
+        border-radius: 4px;
+        color: #6ab0ff;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 18px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 6px;
+        outline: none;
+        margin-bottom: 16px;
+      }
+      .code-input:focus { border-color: #4287f5; }
+      .code-input::placeholder { color: #334; font-size: 12px; letter-spacing: 2px; }
+
+      /* Browse rooms */
+      #menu-browse { width: 100%; max-width: 700px; padding: 20px; }
+      #menu-browse h2 { font-size: 14px; color: #6ab0ff; margin-bottom: 16px; text-shadow: 1px 1px 0 #000; }
+      .room-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 12px;
+      }
+      .room-table th {
+        text-align: left;
+        padding: 6px 10px;
+        font-size: 8px;
+        color: #888;
+        border-bottom: 1px solid #334;
+      }
+      .room-table td {
+        padding: 6px 10px;
         font-size: 9px;
+        color: #ccc;
+        border-bottom: 1px solid #223;
+      }
+      .room-table tr:hover td { color: #fff; background: rgba(30, 40, 80, 0.4); }
+      .room-table .join-btn {
+        padding: 4px 10px;
+        background: rgba(0, 0, 40, 0.9);
+        border: 1px solid #4287f5;
+        color: #6ab0ff;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 7px;
         cursor: pointer;
       }
-      .back-btn:hover { border-color: #4287f5; color: #ccc; }
+      .room-table .join-btn:hover { background: rgba(40, 60, 120, 0.9); color: #fff; }
+      .no-rooms { color: #555; font-size: 9px; text-align: center; padding: 20px; }
 
-      /* Teams */
-      #menu-teams { width: 100%; max-width: 600px; padding: 20px; }
-      #menu-teams h2 { font-size: 14px; color: #6ab0ff; margin-bottom: 16px; text-shadow: 1px 1px 0 #000; }
-      .team-slot {
+      /* Lobby (room) */
+      #menu-lobby { width: 100%; max-width: 800px; max-height: 100vh; overflow-y: auto; padding: 20px; }
+      #menu-lobby h2 { font-size: 14px; color: #6ab0ff; margin-bottom: 4px; text-shadow: 1px 1px 0 #000; }
+      .room-code-display {
+        font-size: 20px;
+        color: #6ab0ff;
+        letter-spacing: 6px;
+        margin-bottom: 16px;
+        cursor: pointer;
+        user-select: all;
+      }
+      .room-code-display:hover { color: #fff; }
+      .room-code-display .copy-hint {
+        font-size: 7px;
+        color: #555;
+        letter-spacing: 0;
+        display: block;
+        margin-top: 4px;
+      }
+      .lobby-cols {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+        margin-bottom: 16px;
+      }
+      .lobby-left { flex: 1; min-width: 200px; }
+      .lobby-right { flex: 2; }
+
+      /* Player list in lobby */
+      .lobby-player-list {
+        background: rgba(0, 0, 30, 0.8);
+        border: 1px solid #334;
+        border-radius: 4px;
+        padding: 10px;
+        min-height: 120px;
+      }
+      .lobby-player-list h3 {
+        font-size: 9px;
+        color: #888;
+        margin-bottom: 8px;
+      }
+      .lobby-player {
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-bottom: 6px;
-        padding: 6px 10px;
-        background: rgba(0, 0, 30, 0.7);
-        border: 1px solid #223;
-        border-radius: 4px;
+        padding: 4px 0;
+        font-size: 9px;
       }
-      .team-color {
-        width: 16px;
-        height: 16px;
-        border-radius: 3px;
-        border: 1px solid #555;
+      .lobby-player .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
         flex-shrink: 0;
       }
-      .team-slot select, .team-slot input {
+      .lobby-player .ready-icon { color: #42f560; font-size: 8px; }
+      .lobby-player .not-ready-icon { color: #555; font-size: 8px; }
+      .lobby-player .host-tag {
+        font-size: 7px;
+        color: #f5d742;
+        background: rgba(245, 215, 66, 0.15);
+        padding: 1px 4px;
+        border-radius: 2px;
+      }
+
+      /* Host controls */
+      .host-controls {
+        background: rgba(0, 0, 30, 0.8);
+        border: 1px solid #334;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 12px;
+      }
+      .host-controls h3 {
+        font-size: 9px;
+        color: #888;
+        margin-bottom: 8px;
+      }
+      .host-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 9px;
+        color: #aaa;
+      }
+      .host-row input[type="range"] { width: 80px; accent-color: #4287f5; }
+      .host-row select {
         background: rgba(0, 0, 20, 0.9);
         border: 1px solid #334;
         color: #ccc;
@@ -204,8 +471,85 @@
         font-size: 8px;
         padding: 4px 6px;
       }
-      .team-slot input { width: 100px; }
-      .team-slot select { width: 70px; }
+      .toggle-btn {
+        padding: 4px 10px;
+        background: rgba(0, 0, 40, 0.9);
+        border: 1px solid #334;
+        color: #888;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 7px;
+        cursor: pointer;
+      }
+      .toggle-btn.active { border-color: #42f560; color: #42f560; }
+
+      /* Map select in lobby */
+      .lobby-map-section { margin-bottom: 12px; }
+      .lobby-map-section h3 { font-size: 9px; color: #888; margin-bottom: 8px; }
+      .lobby-map-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 6px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      /* Lobby action buttons */
+      .lobby-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        margin-top: 12px;
+      }
+      .ready-btn {
+        padding: 10px 24px;
+        background: rgba(0, 0, 40, 0.9);
+        border: 2px solid #42f560;
+        color: #42f560;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 11px;
+        cursor: pointer;
+        text-transform: uppercase;
+      }
+      .ready-btn:hover { background: rgba(20, 60, 20, 0.9); color: #fff; }
+      .ready-btn.is-ready { background: rgba(20, 60, 20, 0.6); }
+      .start-btn {
+        padding: 10px 24px;
+        background: rgba(0, 0, 40, 0.9);
+        border: 2px solid #4287f5;
+        color: #6ab0ff;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 11px;
+        cursor: pointer;
+        text-transform: uppercase;
+      }
+      .start-btn:hover { background: rgba(40, 60, 120, 0.9); color: #fff; }
+      .leave-btn {
+        padding: 10px 24px;
+        background: rgba(0, 0, 40, 0.9);
+        border: 2px solid #f54242;
+        color: #f54242;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 11px;
+        cursor: pointer;
+        text-transform: uppercase;
+      }
+      .leave-btn:hover { background: rgba(60, 20, 20, 0.9); color: #fff; }
+
+      /* Countdown overlay */
+      #countdown-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 20, 0.85);
+        z-index: 150;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 64px;
+        color: #6ab0ff;
+        text-shadow: 3px 3px 0 #000;
+      }
+      #countdown-overlay.hidden { display: none; }
 
       /* Options */
       #menu-options { width: 100%; max-width: 400px; padding: 20px; }
@@ -245,21 +589,155 @@
       #winner-text {
         font-size: 28px;
         text-shadow: 2px 2px 0 #000;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
       }
-      #return-to-menu {
-        padding: 10px 20px;
-        background: rgba(0, 0, 40, 0.9);
-        border: 2px solid #4287f5;
-        color: #6ab0ff;
+      #game-over .info-text {
+        font-size: 9px;
+        color: #888;
+      }
+
+      /* In-game menu */
+      #game-menu {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 20, 0.85);
+        z-index: 55;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         font-family: 'Press Start 2P', monospace;
-        font-size: 11px;
-        cursor: pointer;
-        text-transform: uppercase;
+        gap: 8px;
       }
-      #return-to-menu:hover {
-        background: rgba(40, 60, 120, 0.9);
+      #game-menu.hidden { display: none; }
+      #game-menu h2 {
+        font-size: 20px;
+        color: #6ab0ff;
+        margin-bottom: 16px;
+        text-shadow: 2px 2px 0 #000040;
+      }
+      .game-menu-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 8px;
+        color: #aaa;
+        font-size: 9px;
+      }
+      .game-menu-option input[type="range"] {
+        width: 120px;
+        accent-color: #4287f5;
+      }
+
+      /* Error toast */
+      #error-toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(245, 66, 66, 0.9);
         color: #fff;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 9px;
+        padding: 10px 20px;
+        border-radius: 4px;
+        z-index: 200;
+        transition: opacity 0.3s;
+      }
+      #error-toast.hidden { opacity: 0; pointer-events: none; }
+
+      /* ── Mobile / Tablet ── */
+      @media (max-width: 768px) {
+        body { font-size: 9px; }
+
+        /* Menu root */
+        #menu-root { padding: 12px; overflow-y: auto; }
+
+        /* Main menu */
+        #menu-main h1 { font-size: 16px; letter-spacing: 2px; }
+        #menu-main .subtitle { font-size: 7px; margin-bottom: 16px; }
+
+        /* Buttons: bigger touch targets, full width */
+        .menu-btn {
+          width: 100%;
+          max-width: 280px;
+          padding: 14px 12px;
+          font-size: 10px;
+        }
+        .back-btn { padding: 12px 20px; font-size: 10px; }
+        .ready-btn, .start-btn, .leave-btn {
+          padding: 12px 16px;
+          font-size: 10px;
+        }
+
+        /* Name / Search inputs full width */
+        .name-row { flex-wrap: wrap; justify-content: center; }
+        .name-row input { width: 100%; max-width: 200px; }
+        .search { width: 100%; max-width: 280px; }
+        .code-input { width: 100%; max-width: 200px; font-size: 14px; letter-spacing: 4px; }
+
+        /* SP layout: stack columns */
+        #menu-sp-map { max-width: 100%; padding: 12px; }
+        .sp-layout { flex-direction: column; }
+        .sp-left { min-width: unset; }
+
+        /* Team slots: compact */
+        .sp-team-slot { gap: 4px; padding: 4px 6px; flex-wrap: wrap; }
+        .sp-team-mode { font-size: 7px; min-width: 44px; padding: 5px 4px; }
+        .sp-team-slot input[type="text"] { flex: 1; min-width: 0; width: auto; }
+        #sp-team-slots { max-height: 180px; }
+
+        /* Rule rows: wrap */
+        .rule-row { flex-wrap: wrap; gap: 4px; }
+        .rule-row input[type="range"] { flex: 1; min-width: 80px; width: auto; }
+
+        /* Map grid: smaller cards */
+        .map-grid {
+          grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+          max-height: 40vh;
+          gap: 6px;
+        }
+        .map-card .label { font-size: 6px; padding: 3px 4px; }
+
+        /* Browse rooms */
+        #menu-browse { padding: 12px; max-width: 100%; }
+        .room-table { font-size: 7px; }
+        .room-table th, .room-table td { padding: 4px 6px; }
+        .room-table .join-btn { font-size: 6px; padding: 3px 6px; }
+
+        /* Lobby: stack columns */
+        #menu-lobby { padding: 12px; max-width: 100%; }
+        .lobby-cols { flex-direction: column; gap: 12px; }
+        .lobby-left { min-width: unset; }
+        .room-code-display { font-size: 16px; letter-spacing: 4px; }
+        .lobby-map-grid {
+          grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+          max-height: 150px;
+        }
+        .lobby-actions { flex-wrap: wrap; }
+
+        /* Host controls */
+        .host-row { flex-wrap: wrap; gap: 4px; }
+        .host-row input[type="range"] { width: 100%; }
+
+        /* Options */
+        #menu-options { padding: 12px; max-width: 100%; }
+        .opt-row { flex-wrap: wrap; gap: 6px; }
+        .opt-row input[type="range"] { width: 100%; }
+
+        /* About */
+        #menu-about { padding: 16px; max-width: 100%; }
+
+        /* Countdown */
+        #countdown-overlay { font-size: 48px; }
+
+        /* Game over */
+        #winner-text { font-size: 20px; }
+
+        /* In-game menu */
+        #game-menu h2 { font-size: 14px; margin-bottom: 10px; }
+        .game-menu-option { font-size: 8px; gap: 8px; }
+        .game-menu-option input[type="range"] { width: 100px; }
       }
     </style>
   </head>
@@ -267,55 +745,216 @@
     <div id="menu-root">
       <!-- Main Menu -->
       <div id="menu-main" class="menu-screen">
-        <h1>LIQUID WAR</h1>
-        <p class="subtitle">Web port of Liquid War 5</p>
-        <button class="menu-btn primary" data-screen="map">Play</button>
-        <button class="menu-btn" data-screen="teams">Teams</button>
+        <h1>LIQUIDWAR.IO</h1>
+        <p class="subtitle">Based on Liquid War 5</p>
+        <div class="name-row">
+          <label>Name:</label>
+          <input type="text" id="player-name" value="Player" maxlength="12" />
+        </div>
+        <button class="menu-btn primary" data-screen="sp-map">Single Player</button>
+        <button class="menu-btn primary" data-screen="multiplayer">Multiplayer</button>
         <button class="menu-btn" data-screen="options">Options</button>
         <button class="menu-btn" data-screen="about">About</button>
       </div>
 
-      <!-- Map Selection -->
-      <div id="menu-map" class="menu-screen hidden">
-        <h2>SELECT MAP</h2>
-        <input class="search" type="text" placeholder="Search maps..." id="map-search" />
-        <div id="map-grid"></div>
-        <button class="back-btn">Back</button>
+      <!-- Single Player Setup -->
+      <div id="menu-sp-map" class="menu-screen hidden">
+        <h2>SINGLE PLAYER</h2>
+        <div class="sp-layout">
+          <div class="sp-left">
+            <div class="sp-section">
+              <h3>Teams</h3>
+              <div id="sp-team-slots"></div>
+            </div>
+            <div class="sp-section">
+              <h3>Rules</h3>
+              <div class="rule-row"><span>Attack</span><input type="range" min="0" max="32" value="8" id="sp-attack" /><span class="rule-val" id="sp-attack-val">8</span></div>
+              <div class="rule-row"><span>Defense</span><input type="range" min="0" max="32" value="8" id="sp-defense" /><span class="rule-val" id="sp-defense-val">8</span></div>
+              <div class="rule-row"><span>Health</span><input type="range" min="0" max="32" value="8" id="sp-health" /><span class="rule-val" id="sp-health-val">8</span></div>
+              <div class="rule-row"><span>Influence</span><input type="range" min="0" max="32" value="8" id="sp-influence" /><span class="rule-val" id="sp-influence-val">8</span></div>
+              <div class="rule-row"><span>Army Size</span><input type="range" min="0" max="32" value="16" id="sp-army" /><span class="rule-val" id="sp-army-val">16</span></div>
+              <div class="rule-row"><span>Cursor Spd</span><input type="range" min="1" max="5" value="1" id="sp-cursor-speed" /><span class="rule-val" id="sp-cursor-speed-val">1</span></div>
+            </div>
+          </div>
+          <div class="sp-right">
+            <div class="sp-section">
+              <h3>Select Map</h3>
+              <input class="search" type="text" placeholder="Search maps..." id="sp-map-search" />
+              <div class="map-grid" id="sp-map-grid"></div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; margin-top:12px;">
+          <button class="menu-btn primary" id="btn-sp-start">Start Game</button>
+        </div>
+        <button class="back-btn" data-back="main">Back</button>
       </div>
 
-      <!-- Teams -->
-      <div id="menu-teams" class="menu-screen hidden">
-        <h2>TEAMS</h2>
-        <div id="team-slots"></div>
-        <button class="back-btn">Back</button>
+      <!-- Multiplayer Submenu -->
+      <div id="menu-multiplayer" class="menu-screen hidden">
+        <h2>MULTIPLAYER</h2>
+        <button class="menu-btn primary" id="btn-quick-play">Quick Play</button>
+        <button class="menu-btn" id="btn-create-room">Create Room</button>
+        <button class="menu-btn" data-screen="join">Join Room</button>
+        <button class="menu-btn" data-screen="browse">Browse Rooms</button>
+        <button class="back-btn" data-back="main">Back</button>
+      </div>
+
+      <!-- Join Room -->
+      <div id="menu-join" class="menu-screen hidden">
+        <h2>JOIN ROOM</h2>
+        <input class="code-input" type="text" id="join-code-input" maxlength="4" placeholder="CODE" />
+        <button class="menu-btn primary" id="btn-join-code">Join</button>
+        <button class="back-btn" data-back="multiplayer">Back</button>
+      </div>
+
+      <!-- Browse Rooms -->
+      <div id="menu-browse" class="menu-screen hidden">
+        <h2>BROWSE ROOMS</h2>
+        <table class="room-table">
+          <thead>
+            <tr><th>Code</th><th>Host</th><th>Players</th><th>Map</th><th>Mode</th><th></th></tr>
+          </thead>
+          <tbody id="room-table-body">
+          </tbody>
+        </table>
+        <div class="no-rooms hidden" id="no-rooms-msg">No public rooms available</div>
+        <button class="menu-btn" id="btn-refresh-rooms">Refresh</button>
+        <button class="back-btn" data-back="multiplayer">Back</button>
+      </div>
+
+      <!-- Create Room Setup -->
+      <div id="menu-create-room" class="menu-screen hidden">
+        <h2>CREATE ROOM</h2>
+        <div class="sp-layout">
+          <div class="sp-left">
+            <div class="sp-section">
+              <h3>Mode</h3>
+              <div class="vanilla-row">
+                <button class="vanilla-btn active" id="cr-vanilla-btn">VANILLA</button>
+                <button class="vanilla-btn" id="cr-custom-btn">CUSTOM</button>
+              </div>
+            </div>
+            <div class="sp-section" id="cr-rules-section">
+              <h3>Rules</h3>
+              <div class="rule-row disabled"><span>Attack</span><input type="range" min="0" max="32" value="8" id="cr-attack" /><span class="rule-val" id="cr-attack-val">8</span></div>
+              <div class="rule-row disabled"><span>Defense</span><input type="range" min="0" max="32" value="8" id="cr-defense" /><span class="rule-val" id="cr-defense-val">8</span></div>
+              <div class="rule-row disabled"><span>Health</span><input type="range" min="0" max="32" value="8" id="cr-health" /><span class="rule-val" id="cr-health-val">8</span></div>
+              <div class="rule-row disabled"><span>Influence</span><input type="range" min="0" max="32" value="8" id="cr-influence" /><span class="rule-val" id="cr-influence-val">8</span></div>
+              <div class="rule-row disabled"><span>Army Size</span><input type="range" min="0" max="32" value="16" id="cr-army" /><span class="rule-val" id="cr-army-val">16</span></div>
+            </div>
+            <div class="sp-section">
+              <h3>Settings</h3>
+              <div class="rule-row"><span>Bots</span><input type="range" min="0" max="31" value="1" id="cr-bots" /><span class="rule-val" id="cr-bots-val">1</span></div>
+              <div class="host-row">
+                <span>Public</span>
+                <button class="toggle-btn active" id="cr-public-toggle">ON</button>
+              </div>
+            </div>
+          </div>
+          <div class="sp-right">
+            <div class="sp-section">
+              <h3>Select Map</h3>
+              <input class="search" type="text" placeholder="Search maps..." id="cr-map-search" />
+              <div class="map-grid" id="cr-map-grid"></div>
+            </div>
+          </div>
+        </div>
+        <div class="lobby-actions">
+          <button class="start-btn" id="btn-do-create-room">Create</button>
+          <button class="back-btn" data-back="multiplayer">Back</button>
+        </div>
+      </div>
+
+      <!-- Room Lobby -->
+      <div id="menu-lobby" class="menu-screen hidden">
+        <h2>ROOM</h2>
+        <div class="room-code-display" id="lobby-room-code">
+          ????
+          <span class="copy-hint">click to copy</span>
+        </div>
+        <div class="lobby-cols">
+          <div class="lobby-left">
+            <div class="lobby-player-list" id="lobby-player-list">
+              <h3>Players</h3>
+            </div>
+          </div>
+          <div class="lobby-right">
+            <div class="host-controls" id="host-controls">
+              <h3>Room Settings</h3>
+              <div class="host-row">
+                <span>Bots</span>
+                <input type="range" min="0" max="31" value="1" id="lobby-bot-count" />
+                <span id="lobby-bot-count-val">1</span>
+              </div>
+              <div class="host-row">
+                <span>Public</span>
+                <button class="toggle-btn" id="lobby-public-toggle">OFF</button>
+              </div>
+              <div class="host-row">
+                <span>Mode</span>
+                <div class="vanilla-row">
+                  <button class="vanilla-btn active" id="lobby-vanilla-btn">VANILLA</button>
+                  <button class="vanilla-btn" id="lobby-custom-btn">CUSTOM</button>
+                </div>
+              </div>
+              <h3 style="margin-top:8px">Rules</h3>
+              <div class="rule-row disabled" id="lobby-attack-row"><span>Attack</span><input type="range" min="0" max="32" value="8" id="lobby-attack" /><span class="rule-val" id="lobby-attack-val">8</span></div>
+              <div class="rule-row disabled" id="lobby-defense-row"><span>Defense</span><input type="range" min="0" max="32" value="8" id="lobby-defense" /><span class="rule-val" id="lobby-defense-val">8</span></div>
+              <div class="rule-row disabled" id="lobby-health-row"><span>Health</span><input type="range" min="0" max="32" value="8" id="lobby-health" /><span class="rule-val" id="lobby-health-val">8</span></div>
+              <div class="rule-row disabled" id="lobby-influence-row"><span>Influence</span><input type="range" min="0" max="32" value="8" id="lobby-influence" /><span class="rule-val" id="lobby-influence-val">8</span></div>
+              <div class="rule-row disabled" id="lobby-army-row"><span>Army Size</span><input type="range" min="0" max="32" value="16" id="lobby-army" /><span class="rule-val" id="lobby-army-val">16</span></div>
+            </div>
+            <div class="lobby-map-section">
+              <h3>Select Map</h3>
+              <input class="search" type="text" placeholder="Search maps..." id="lobby-map-search" style="width:200px" />
+              <div class="lobby-map-grid" id="lobby-map-grid"></div>
+            </div>
+          </div>
+        </div>
+        <div class="lobby-actions">
+          <button class="ready-btn" id="btn-ready">Ready</button>
+          <button class="start-btn hidden" id="btn-start-game">Start</button>
+          <button class="leave-btn" id="btn-leave-room">Leave</button>
+        </div>
       </div>
 
       <!-- Options -->
       <div id="menu-options" class="menu-screen hidden">
         <h2>OPTIONS</h2>
         <div class="opt-row"><span>Cursor Speed</span><input type="range" min="1" max="5" value="1" id="opt-cursor-speed" /></div>
-        <div class="opt-row"><span>Music Volume</span><input type="range" min="0" max="100" value="50" id="opt-music-vol" /></div>
-        <div class="opt-row"><span>SFX Volume</span><input type="range" min="0" max="100" value="60" id="opt-sfx-vol" /></div>
-        <div class="opt-row"><span>Water Volume</span><input type="range" min="0" max="100" value="30" id="opt-water-vol" /></div>
-        <button class="back-btn">Back</button>
+        <div class="opt-row"><span>Music Volume</span><input type="range" min="0" max="100" value="70" id="opt-music-vol" /></div>
+        <div class="opt-row"><span>SFX Volume</span><input type="range" min="0" max="100" value="50" id="opt-sfx-vol" /></div>
+        <div class="opt-row"><span>Water Volume</span><input type="range" min="0" max="100" value="15" id="opt-water-vol" /></div>
+        <button class="back-btn" data-back="main">Back</button>
       </div>
 
       <!-- About -->
       <div id="menu-about" class="menu-screen hidden">
         <h2>ABOUT</h2>
-        <p>Liquid War 5 — Web Port</p>
+        <p>LiquidWar.io</p>
         <p>Original game by Thomas Colcombet</p>
         <p>Licensed under GNU GPL v2</p>
         <p><a href="https://www.gnu.org/copyleft/gpl.html">www.gnu.org/copyleft/gpl.html</a></p>
-        <button class="back-btn">Back</button>
+        <button class="back-btn" data-back="main">Back</button>
       </div>
     </div>
 
+    <div id="countdown-overlay" class="hidden"></div>
     <div id="game-over" class="hidden">
       <div id="winner-text"></div>
-      <button id="return-to-menu">Return to Menu</button>
+      <div class="info-text">Returning to lobby...</div>
     </div>
-    <div id="scoreboard" class="hidden"></div>
+    <div id="game-menu" class="hidden">
+      <h2>PAUSED</h2>
+      <button class="menu-btn primary" id="btn-resume">Resume</button>
+      <button class="menu-btn" id="btn-leave-game">Leave Game</button>
+      <div class="game-menu-option">
+        <span>Cursor Speed</span>
+        <input type="range" min="1" max="5" value="1" id="gm-cursor-speed" />
+      </div>
+    </div>
+    <div id="error-toast" class="hidden"></div>
     <canvas id="game" class="hidden"></canvas>
     <script type="module" src="/src/main.ts"></script>
   </body>

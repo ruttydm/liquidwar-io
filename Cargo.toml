@@ -1,5 +1,5 @@
 [workspace]
-members = ["game", "client-wasm", "server"]
+members = ["game", "client-wasm", "server", "docs-site"]
 resolver = "2"
 
 [profile.release]

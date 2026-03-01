@@ -173,9 +173,9 @@ export class AudioManager {
 
   private waterEl: HTMLAudioElement | null = null;
   private currentTrack = -1;
-  private musicVolume = 0.5;
-  private sfxVolume = 0.6;
-  private waterVolume = 0.3;
+  private musicVolume = 0.7;
+  private sfxVolume = 0.5;
+  private waterVolume = 0.15;
   private enabled = false;
 
   // MIDI playback state

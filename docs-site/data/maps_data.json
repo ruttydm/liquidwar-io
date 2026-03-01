@@ -1,0 +1,1856 @@
+[
+  {
+    "id": "007",
+    "name": "Bond, James Bond",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 147,
+    "height": 84
+  },
+  {
+    "id": "213",
+    "name": "Mathematics are easy",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 147,
+    "height": 93
+  },
+  {
+    "id": "2d",
+    "name": "Kasper - 2d",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "3d",
+    "name": "Kasper - 3d",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "3x3",
+    "name": "Kasper - Tick Tack Toe",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "4zones",
+    "name": "4 zones",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 200,
+    "height": 200
+  },
+  {
+    "id": "666",
+    "name": "Whose number is that?",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 300,
+    "height": 225
+  },
+  {
+    "id": "8",
+    "name": "Jan - Eight houses",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 278,
+    "height": 184
+  },
+  {
+    "id": "ac",
+    "name": "Kasper - Ac",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 421,
+    "height": 360
+  },
+  {
+    "id": "alstar1",
+    "name": "Alstar - Alstar's map",
+    "author": "Alstar",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 256,
+    "height": 180
+  },
+  {
+    "id": "anaglyph1",
+    "name": "Kasper - Anaglyph 1",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "anaglyph2",
+    "name": "Kasper - Anaglyph 2",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "aquarium",
+    "name": "Aquarium",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 480,
+    "height": 360
+  },
+  {
+    "id": "around",
+    "name": "Kasper - Around",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 421,
+    "height": 360
+  },
+  {
+    "id": "artland",
+    "name": "Artland",
+    "author": "Kasper Hviid",
+    "description": "Rendered in Photoshop, based on a mostly hand-drawn bump map.",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "id": "atlantis",
+    "name": "Atlantis",
+    "author": "Kasper Hviid",
+    "description": "Painted in the real world, colorized in Photoshop CS3",
+    "license": "CC BY-SA 3.0 or, at your option, GPL v3+",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "id": "avoid-the-void",
+    "name": "Avoid The Void",
+    "author": "Kasper Hviid",
+    "description": "The idea was to create an open level without any graphic, so that it wouldn't take up any space.",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 61,
+    "height": 46
+  },
+  {
+    "id": "bestiole",
+    "name": "Happy spider",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 194,
+    "height": 182
+  },
+  {
+    "id": "biere",
+    "name": "Serieux destroy!",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 167,
+    "height": 211
+  },
+  {
+    "id": "big",
+    "name": "Kasper - Big 1",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 562,
+    "height": 480
+  },
+  {
+    "id": "blemmya",
+    "name": "Kasper - Blemmya",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "boa",
+    "name": "An elephant inside a boa",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 170,
+    "height": 85
+  },
+  {
+    "id": "bonoball",
+    "name": "Ballons",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 212,
+    "height": 189
+  },
+  {
+    "id": "bored",
+    "name": "Kasper - Labyrinth 1",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "bricks",
+    "name": "Bricks",
+    "author": "Thomas Colcombet",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 100,
+    "height": 100
+  },
+  {
+    "id": "bubbles",
+    "name": "Jan - Bubbles",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 370,
+    "height": 271
+  },
+  {
+    "id": "card",
+    "name": "Kasper - card",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "carreaux",
+    "name": "Squarish stuff",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 224,
+    "height": 160
+  },
+  {
+    "id": "carres",
+    "name": "Random rectangles",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 179,
+    "height": 129
+  },
+  {
+    "id": "centrik",
+    "name": "You are sleeping",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 216,
+    "height": 195
+  },
+  {
+    "id": "charming",
+    "name": "Kasper - Anaglyph 2 (charming)",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "chenille",
+    "name": "Slow slow...",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 400,
+    "height": 300
+  },
+  {
+    "id": "chess",
+    "name": "Kasper - Chess",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "chinois",
+    "name": "Ping",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 148,
+    "height": 97
+  },
+  {
+    "id": "circle",
+    "name": "Kasper - Circle",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "circles",
+    "name": "Circles",
+    "author": "Christian Mauduit",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "circles-and-pipes",
+    "name": "Circles And Pipes",
+    "author": "Thomas Colcombet",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 160,
+    "height": 100
+  },
+  {
+    "id": "circlus",
+    "name": "Kasper - Space 1",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "clean",
+    "name": "Kasper - Green",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "clown",
+    "name": "Clown",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 207,
+    "height": 148
+  },
+  {
+    "id": "coccinel",
+    "name": "Nice bug",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 224,
+    "height": 157
+  },
+  {
+    "id": "coeurs",
+    "name": "Mmmmmmmmm",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 166,
+    "height": 119
+  },
+  {
+    "id": "confuse",
+    "name": "Kasper - confuse",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "copyright-notice",
+    "name": "Copyright Notice",
+    "author": "Christian Mauduit",
+    "description": "Open map with text on it, which acts as small obstacles",
+    "license": "GPL v3+",
+    "width": 512,
+    "height": 384
+  },
+  {
+    "id": "cornet3b",
+    "name": "Sluuuuurp",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 114,
+    "height": 148
+  },
+  {
+    "id": "crown",
+    "name": "Crown",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 200,
+    "height": 200
+  },
+  {
+    "id": "darkness",
+    "name": "Darkness",
+    "author": "Kasper Hviid",
+    "description": "Floating bubbles in the dark",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "id": "darkone1",
+    "name": "Jan - Dark One 1",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 428,
+    "height": 327
+  },
+  {
+    "id": "darkone2",
+    "name": "Jan - Dark One 2",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 428,
+    "height": 327
+  },
+  {
+    "id": "darkone3",
+    "name": "Jan - Dark One 3",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 428,
+    "height": 327
+  },
+  {
+    "id": "darkone4",
+    "name": "Jan - Dark One 4",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 428,
+    "height": 327
+  },
+  {
+    "id": "debian-swirl",
+    "name": "Debian Swirl",
+    "author": "Christian Mauduit",
+    "description": "Debian logo as unique obstacle",
+    "license": "GPL v3+",
+    "width": 300,
+    "height": 367
+  },
+  {
+    "id": "derivsol",
+    "name": "Sailing",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 209,
+    "height": 159
+  },
+  {
+    "id": "dirt",
+    "name": "Kasper - Labyrinth 2",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "dog",
+    "name": "Dog",
+    "author": "Kasper Hviid",
+    "description": "Empty level",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 796,
+    "height": 448
+  },
+  {
+    "id": "donuts",
+    "name": "Five donuts",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 204,
+    "height": 158
+  },
+  {
+    "id": "dots-and-curves",
+    "name": "Dots And Curves",
+    "author": "Christian Mauduit",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "echange",
+    "name": "Highway",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 301,
+    "height": 272
+  },
+  {
+    "id": "echlune",
+    "name": "Climb and grab it",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 141,
+    "height": 160
+  },
+  {
+    "id": "egg",
+    "name": "Kasper - Egg",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "empty",
+    "name": "Empty",
+    "author": "Christian Mauduit",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "etoile",
+    "name": "Star",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 148,
+    "height": 148
+  },
+  {
+    "id": "eyes",
+    "name": "Kasper - Eyes",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "feuille",
+    "name": "Leaf",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 201,
+    "height": 114
+  },
+  {
+    "id": "fille",
+    "name": "Girl",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 116,
+    "height": 145
+  },
+  {
+    "id": "fils",
+    "name": "Emberlificoted",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 160,
+    "height": 100
+  },
+  {
+    "id": "flo1",
+    "name": "Florence's map",
+    "author": "Florence Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 132,
+    "height": 79
+  },
+  {
+    "id": "fluffy",
+    "name": "Fluffy",
+    "author": "Kasper Hviid",
+    "description": "A level with holes in it",
+    "license": "CC BY-SA 3.0 or, at your option, GPL v3+",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "id": "fmos",
+    "name": "Fmos",
+    "author": "Kasper Hviid",
+    "description": "A fake GUI, to amuse people.",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "id": "foo-bar-mouse",
+    "name": "Foo Bar Mouse",
+    "author": "Christian Mauduit",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 128,
+    "height": 96
+  },
+  {
+    "id": "garcon",
+    "name": "Boy",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 126,
+    "height": 148
+  },
+  {
+    "id": "garden",
+    "name": "Kasper - Labyrinth 3",
+    "author": "Kasper Hviid",
+    "description": "Drawn with pencil, inked with pen and ink, colorized with Photoshop CS3",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "geometric",
+    "name": "Geometric",
+    "author": "Thomas Colcombet",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 120,
+    "height": 75
+  },
+  {
+    "id": "geometry",
+    "name": "Geometry",
+    "author": "Joey Dodson",
+    "description": "Designed for LW5, ported to LW6",
+    "license": "GPL v2+",
+    "width": 800,
+    "height": 800
+  },
+  {
+    "id": "glasses",
+    "name": "Glasses",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 512,
+    "height": 384
+  },
+  {
+    "id": "good-and-bad",
+    "name": "Good And Bad",
+    "author": "Christian Mauduit",
+    "description": "Fighters will die in the center (skull) and regain energy in the corners (hearts)",
+    "license": "GPL v3+",
+    "width": 1024,
+    "height": 768
+  },
+  {
+    "id": "h",
+    "name": "Jan - The great H",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 392,
+    "height": 298
+  },
+  {
+    "id": "haricot",
+    "name": "Bean",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 200,
+    "height": 150
+  },
+  {
+    "id": "hi",
+    "name": "Jan - Fight in the middle",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 522,
+    "height": 459
+  },
+  {
+    "id": "honey",
+    "name": "Kasper - Honey",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "honeymoon",
+    "name": "Kasper - Honeymoon",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "infestival",
+    "name": "Infestival",
+    "author": "Kasper Hviid",
+    "description": "A map without any visible walls - only a few hatchet lines guides the way.",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "id": "infinite",
+    "name": "Infinite",
+    "author": "Christian Mauduit",
+    "description": "A simple map showing how polarity works, this map simply has no limits",
+    "license": "GPL v3+",
+    "width": 640,
+    "height": 480
+  },
+  {
+    "id": "into-the-void",
+    "name": "Into The Void",
+    "author": "Kasper Hviid",
+    "description": "Painted with oil pastels on black paper. This is my first LW6 level in widescreen.",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 1600,
+    "height": 1000
+  },
+  {
+    "id": "jabberwocky",
+    "name": "Kasper - jabberwocky",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "labyrint",
+    "name": "Kasper - Labyrinth 4",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "lapin",
+    "name": "What's up doc?",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 164,
+    "height": 193
+  },
+  {
+    "id": "liqwar",
+    "name": "What's the name of the game?",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 148,
+    "height": 84
+  },
+  {
+    "id": "logo",
+    "name": "Kasper - Logo",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "loop-forever",
+    "name": "Loop Forever",
+    "author": "Christian Mauduit",
+    "description": "Fighters are forced to go clockwise",
+    "license": "GPL v3+",
+    "width": 500,
+    "height": 500
+  },
+  {
+    "id": "lost",
+    "name": "Kasper - Lost",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "lw",
+    "name": "Kasper - Logo 2",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "lwtab002",
+    "name": "LW3 - Small rectangles",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "lwtab003",
+    "name": "LW3 - Random islands",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 160,
+    "height": 100
+  },
+  {
+    "id": "lwtab004",
+    "name": "LW3 - Circles and pipes",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 160,
+    "height": 100
+  },
+  {
+    "id": "lwtab005",
+    "name": "LW3 - Puzzle",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 160,
+    "height": 100
+  },
+  {
+    "id": "lwtab006",
+    "name": "LW3 - Puzzle for kids",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "lwtab008",
+    "name": "LW3 - Symetric walls (half)",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "lwtab009",
+    "name": "LW3 - Symetric walls (double)",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 160,
+    "height": 100
+  },
+  {
+    "id": "lwtabbar",
+    "name": "LW3 - Weird walls",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "lwtabdrt",
+    "name": "LW3 - Geometric",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 120,
+    "height": 75
+  },
+  {
+    "id": "lwtabgen",
+    "name": "*The NEW* genuine LW map",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 200,
+    "height": 200
+  },
+  {
+    "id": "lwtabmic",
+    "name": "LW3 - Foo Bar Mouse",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 128,
+    "height": 96
+  },
+  {
+    "id": "lwtabrec",
+    "name": "LW3 - Thin walls",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 120,
+    "height": 75
+  },
+  {
+    "id": "lwtabses",
+    "name": "LW3 - S like snake",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 160,
+    "height": 100
+  },
+  {
+    "id": "lwtabto2",
+    "name": "LW3 - Circles",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "lwtabto4",
+    "name": "LW3 - Bricks",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 100,
+    "height": 100
+  },
+  {
+    "id": "lwtabtom",
+    "name": "LW3 - The old genuine LW map",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 100,
+    "height": 100
+  },
+  {
+    "id": "lwtabtru",
+    "name": "LW3 - Dots and curves",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "lwtabvid",
+    "name": "LW3 - Empty",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "marionet",
+    "name": "Run, run!",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 157,
+    "height": 201
+  },
+  {
+    "id": "maze",
+    "name": "Maze",
+    "author": "Christian Mauduit",
+    "description": "A hudge maze with plenty of room to fight around it",
+    "license": "GPL v3+",
+    "width": 960,
+    "height": 600
+  },
+  {
+    "id": "metation",
+    "name": "Kasper - Carpe Diem",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "mobile",
+    "name": "Mobile",
+    "author": "Kasper Hviid",
+    "description": "This level is a joke - It only came into existence because I got myself a new mobile phone.",
+    "license": "CC BY-SA 3.0 or, at your option, GPL v3+",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "id": "motherboard",
+    "name": "Motherboard",
+    "author": "Kasper Hviid",
+    "description": "Painted in the real world, colorized in Photoshop CS3",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "id": "mouse1",
+    "name": "Mouse - 1",
+    "author": "Mouse",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 320,
+    "height": 239
+  },
+  {
+    "id": "muehle",
+    "name": "Jan - Aim at it",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 522,
+    "height": 459
+  },
+  {
+    "id": "multiroom",
+    "name": "Multiroom",
+    "author": "Joey Dodson",
+    "description": "Designed for LW5, ported to LW6",
+    "license": "GPL v2+",
+    "width": 401,
+    "height": 348
+  },
+  {
+    "id": "musique",
+    "name": "Music",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 215,
+    "height": 152
+  },
+  {
+    "id": "mux",
+    "name": "Mux",
+    "author": "Kasper Hviid",
+    "description": "Map with layers, bridge and tunnel",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 1200,
+    "height": 750
+  },
+  {
+    "id": "net1",
+    "name": "Complex",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 500,
+    "height": 375
+  },
+  {
+    "id": "net2",
+    "name": "Pools and pipes",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 500,
+    "height": 375
+  },
+  {
+    "id": "ordino",
+    "name": "Computer",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 249,
+    "height": 143
+  },
+  {
+    "id": "ornimegalonyx",
+    "name": "Ornimegalonyx",
+    "author": "Kasper Hviid",
+    "description": "Maze-like level",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "id": "paper",
+    "name": "Kasper - Big 2",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 562,
+    "height": 480
+  },
+  {
+    "id": "papercut",
+    "name": "Kasper - Papercut",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "papillon",
+    "name": "Butterfly",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 166,
+    "height": 145
+  },
+  {
+    "id": "pass",
+    "name": "Pass",
+    "author": "Christian Mauduit",
+    "description": "A simple map using layers to create tunnel/bridge effects",
+    "license": "GPL v3+",
+    "width": 800,
+    "height": 600
+  },
+  {
+    "id": "pastel",
+    "name": "Kasper - Pastel",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "peace",
+    "name": "Peace",
+    "author": "Kasper Hviid",
+    "description": "Drawn with pencil and ink, edited in Photoshop.",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "id": "penta",
+    "name": "Pentaminos",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 111,
+    "height": 72
+  },
+  {
+    "id": "peur",
+    "name": "Scared",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 145,
+    "height": 104
+  },
+  {
+    "id": "pieuvre",
+    "name": "Tentacles",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 155,
+    "height": 197
+  },
+  {
+    "id": "pigface",
+    "name": "Pig face",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 210,
+    "height": 189
+  },
+  {
+    "id": "place",
+    "name": "Kasper - Retro",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "platform",
+    "name": "Platforms",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 280,
+    "height": 210
+  },
+  {
+    "id": "poisson",
+    "name": "Fish",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 224,
+    "height": 150
+  },
+  {
+    "id": "policier",
+    "name": "Triiiiiit",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 135,
+    "height": 97
+  },
+  {
+    "id": "portable",
+    "name": "Allo",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 300,
+    "height": 200
+  },
+  {
+    "id": "psyforcegeometry",
+    "name": "Psyforce Geometry",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 800,
+    "height": 800
+  },
+  {
+    "id": "psyforcemultiroom",
+    "name": "Pysforce Multiroom",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 401,
+    "height": 348
+  },
+  {
+    "id": "psyforcespheralcube",
+    "name": "Psyforce Spheral Cube",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 800,
+    "height": 800
+  },
+  {
+    "id": "psyforcesquares",
+    "name": "Psyforce Squares",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 401,
+    "height": 348
+  },
+  {
+    "id": "psyforceultramultiroom",
+    "name": "Psyforce Ultra Multiroom",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 603,
+    "height": 591
+  },
+  {
+    "id": "puckman",
+    "name": "Kasper - Puckman",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "pure-fight",
+    "name": "Pure Fight",
+    "author": "Christian Mauduit",
+    "description": "Empty map, using transparency as eye-candy, no obstacles",
+    "license": "GPL v3+",
+    "width": 200,
+    "height": 150
+  },
+  {
+    "id": "puzzle-for-kids",
+    "name": "Puzzle For Kids",
+    "author": "Thomas Colcombet",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "pxl",
+    "name": "Pxl",
+    "author": "Kasper Hviid",
+    "description": "18 connected rooms",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 320,
+    "height": 180
+  },
+  {
+    "id": "quaders",
+    "name": "Jan - Quaders",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 428,
+    "height": 327
+  },
+  {
+    "id": "random-islands",
+    "name": "Random Islands",
+    "author": "Thomas Colcombet",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 160,
+    "height": 100
+  },
+  {
+    "id": "rect",
+    "name": "Kasper - Rectangle 1",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "rectangle",
+    "name": "Kasper - Rectangle 2",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "rectangled",
+    "name": "Rectangled",
+    "author": "Kasper Hviid",
+    "description": "A level with 24 interconnected rooms",
+    "license": "CC BY-SA 3.0 or, at your option, GPL v3+",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "id": "rene02",
+    "name": "Rene - 02",
+    "author": "Rene Stach",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 225,
+    "height": 225
+  },
+  {
+    "id": "rene03",
+    "name": "Rene - 03",
+    "author": "Rene Stach",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 225,
+    "height": 225
+  },
+  {
+    "id": "rene04",
+    "name": "Rene - 04",
+    "author": "Rene Stach",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 225,
+    "height": 225
+  },
+  {
+    "id": "rolz",
+    "name": "Jan - Railroad",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 429,
+    "height": 305
+  },
+  {
+    "id": "rough",
+    "name": "Kasper - Rough",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 421,
+    "height": 360
+  },
+  {
+    "id": "rust",
+    "name": "Rust",
+    "author": "Kasper Hviid",
+    "description": "One of my maps from LW5, recreated in Photoshop.",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "id": "s-like-snake",
+    "name": "S Like Snake",
+    "author": "Christian Mauduit",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 160,
+    "height": 100
+  },
+  {
+    "id": "sgdb",
+    "name": "91700 SGDB",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 177,
+    "height": 191
+  },
+  {
+    "id": "sinusoid",
+    "name": "Sinusoid",
+    "author": "Kasper Hviid",
+    "description": "The practical purpose of this map was to use the wrap-around feature of LW6.",
+    "license": "CC BY-SA 3.0 or, at your option, GPL v3+",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "id": "skull",
+    "name": "Kasper - Skull 1",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "skullbig",
+    "name": "Kasper - Skull 2",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 421,
+    "height": 360
+  },
+  {
+    "id": "slimy",
+    "name": "Kasper - Slimy",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "small-rectangles",
+    "name": "Small Rectangles",
+    "author": "Thomas Colcombet",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "smile",
+    "name": "Kasper - Smile",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "sol",
+    "name": "G",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 65,
+    "height": 163
+  },
+  {
+    "id": "solsystem",
+    "name": "Solsystem",
+    "author": "N",
+    "description": "Solar system",
+    "license": "GPL v3+",
+    "width": 1200,
+    "height": 706
+  },
+  {
+    "id": "solsystembyn",
+    "name": "Solsystem by N",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 1200,
+    "height": 706
+  },
+  {
+    "id": "sonnesystem",
+    "name": "Solar System",
+    "author": null,
+    "description": null,
+    "license": null,
+    "width": 554,
+    "height": 224
+  },
+  {
+    "id": "spagueti",
+    "name": "Bolognese",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 255,
+    "height": 181
+  },
+  {
+    "id": "spheral-cube",
+    "name": "Spheral Cube",
+    "author": "Joey Dodson",
+    "description": "Designed for LW5, ported to LW6",
+    "license": "GPL v2+",
+    "width": 800,
+    "height": 800
+  },
+  {
+    "id": "spiral",
+    "name": "Spiral",
+    "author": "Kasper Hviid",
+    "description": "An inverted vertical wraparound enables a double vortex to be connected to itself.",
+    "license": "CC BY-SA 3.0 or, at your option, GPL v3+",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "id": "spots",
+    "name": "Spots",
+    "author": "Christian Mauduit",
+    "description": "The spots on the map show how glue works, fighters will stick on it",
+    "license": "GPL v3+",
+    "width": 800,
+    "height": 600
+  },
+  {
+    "id": "squares",
+    "name": "Squares",
+    "author": "Joey Dodson",
+    "description": "Designed for LW5, ported to LW6",
+    "license": "GPL v2+",
+    "width": 401,
+    "height": 348
+  },
+  {
+    "id": "strike",
+    "name": "Strike",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 320,
+    "height": 144
+  },
+  {
+    "id": "symetric-walls-double",
+    "name": "Symetric Walls Double",
+    "author": "Thomas Colcombet",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 160,
+    "height": 100
+  },
+  {
+    "id": "symetric-walls-half",
+    "name": "Symetric Walls Half",
+    "author": "Thomas Colcombet",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "tag",
+    "name": "Jan - Three blocks",
+    "author": "Jan Gretschuskin",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 392,
+    "height": 298
+  },
+  {
+    "id": "the-old-genuine-lw-map",
+    "name": "The Old Genuine Lw Map",
+    "author": "Thomas Colcombet",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 100,
+    "height": 100
+  },
+  {
+    "id": "thin-walls",
+    "name": "Thin Walls",
+    "author": "Christian Mauduit",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 120,
+    "height": 75
+  },
+  {
+    "id": "tiles",
+    "name": "Kasper - Space 2",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 421,
+    "height": 360
+  },
+  {
+    "id": "tilt",
+    "name": "Tilt",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 114,
+    "height": 158
+  },
+  {
+    "id": "tipi",
+    "name": "Tipi",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 218,
+    "height": 134
+  },
+  {
+    "id": "titanic",
+    "name": "Titanic",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 254,
+    "height": 175
+  },
+  {
+    "id": "trumpet",
+    "name": "Trumpet",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 298,
+    "height": 157
+  },
+  {
+    "id": "tulipes",
+    "name": "Tulips",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 178,
+    "height": 120
+  },
+  {
+    "id": "tuyaux",
+    "name": "Pipes",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 400,
+    "height": 300
+  },
+  {
+    "id": "ultra-multiroom",
+    "name": "Ultra Multiroom",
+    "author": "Joey Dodson",
+    "description": "Designed for LW5, ported to LW6",
+    "license": "GPL v2+",
+    "width": 603,
+    "height": 591
+  },
+  {
+    "id": "underground",
+    "name": "Kasper - Underground",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "velo",
+    "name": "Bike",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 158,
+    "height": 138
+  },
+  {
+    "id": "village",
+    "name": "Village",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 213,
+    "height": 145
+  },
+  {
+    "id": "void",
+    "name": "Void",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 320,
+    "height": 240
+  },
+  {
+    "id": "volet",
+    "name": "Window",
+    "author": "Valerie Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 232,
+    "height": 183
+  },
+  {
+    "id": "vortex",
+    "name": "Vortex",
+    "author": "Kasper Hviid",
+    "description": "A level inspired by the comic Uzumaki.xs",
+    "license": "CC BY-SA 2.5 or, at your option, GPL v2+",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "id": "watch",
+    "name": "Kasper - Watch",
+    "author": "Kasper Hviid",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 281,
+    "height": 240
+  },
+  {
+    "id": "wave",
+    "name": "Wave",
+    "author": "Kasper Hviid",
+    "description": "Painted with wax pastels on a piece of green 64x45 cm cardboard. The colors were fixed a lot in Photoshop CS3.",
+    "license": "CC BY-SA 3.0 or, at your option, GPL v3+",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "id": "weird-walls",
+    "name": "Weird Walls",
+    "author": "Christian Mauduit",
+    "description": "Ancient Liquid War 3 map",
+    "license": "GPL v3+",
+    "width": 80,
+    "height": 50
+  },
+  {
+    "id": "world-geo",
+    "name": "World Geo",
+    "author": "Christian Mauduit",
+    "description": "Drawn world map, play LW on real oceans",
+    "license": "GPL v3+",
+    "width": 256,
+    "height": 156
+  },
+  {
+    "id": "world-sat",
+    "name": "World Sat",
+    "author": "Christian Mauduit",
+    "description": "Sattelite view of the world, with a strong zoom",
+    "license": "GPL v3+",
+    "width": 1500,
+    "height": 750
+  },
+  {
+    "id": "world1",
+    "name": "World 1",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 398,
+    "height": 212
+  },
+  {
+    "id": "world2",
+    "name": "World 2",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 562,
+    "height": 284
+  },
+  {
+    "id": "world3",
+    "name": "World 3",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 250,
+    "height": 176
+  },
+  {
+    "id": "world4",
+    "name": "World 4",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 274,
+    "height": 136
+  },
+  {
+    "id": "z",
+    "name": "Z",
+    "author": "Christian Mauduit",
+    "description": "Old Liquid War 5 map",
+    "license": "GPL v3+",
+    "width": 400,
+    "height": 300
+  }
+]

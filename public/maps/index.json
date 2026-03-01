@@ -56,6 +56,18 @@
     "name": "Kasper - Around"
   },
   {
+    "id": "artland",
+    "name": "Artland"
+  },
+  {
+    "id": "atlantis",
+    "name": "Atlantis"
+  },
+  {
+    "id": "avoid-the-void",
+    "name": "Avoid The Void"
+  },
+  {
     "id": "bestiole",
     "name": "Happy spider"
   },
@@ -82,6 +94,10 @@
   {
     "id": "bored",
     "name": "Kasper - Labyrinth 1"
+  },
+  {
+    "id": "bricks",
+    "name": "Bricks"
   },
   {
     "id": "bubbles",
@@ -124,6 +140,14 @@
     "name": "Kasper - Circle"
   },
   {
+    "id": "circles",
+    "name": "Circles"
+  },
+  {
+    "id": "circles-and-pipes",
+    "name": "Circles And Pipes"
+  },
+  {
     "id": "circlus",
     "name": "Kasper - Space 1"
   },
@@ -148,12 +172,20 @@
     "name": "Kasper - confuse"
   },
   {
+    "id": "copyright-notice",
+    "name": "Copyright Notice"
+  },
+  {
     "id": "cornet3b",
     "name": "Sluuuuurp"
   },
   {
     "id": "crown",
     "name": "Crown"
+  },
+  {
+    "id": "darkness",
+    "name": "Darkness"
   },
   {
     "id": "darkone1",
@@ -172,6 +204,10 @@
     "name": "Jan - Dark One 4"
   },
   {
+    "id": "debian-swirl",
+    "name": "Debian Swirl"
+  },
+  {
     "id": "derivsol",
     "name": "Sailing"
   },
@@ -180,8 +216,16 @@
     "name": "Kasper - Labyrinth 2"
   },
   {
+    "id": "dog",
+    "name": "Dog"
+  },
+  {
     "id": "donuts",
     "name": "Five donuts"
+  },
+  {
+    "id": "dots-and-curves",
+    "name": "Dots And Curves"
   },
   {
     "id": "echange",
@@ -194,6 +238,10 @@
   {
     "id": "egg",
     "name": "Kasper - Egg"
+  },
+  {
+    "id": "empty",
+    "name": "Empty"
   },
   {
     "id": "etoile",
@@ -220,6 +268,18 @@
     "name": "Florence's map"
   },
   {
+    "id": "fluffy",
+    "name": "Fluffy"
+  },
+  {
+    "id": "fmos",
+    "name": "Fmos"
+  },
+  {
+    "id": "foo-bar-mouse",
+    "name": "Foo Bar Mouse"
+  },
+  {
     "id": "garcon",
     "name": "Boy"
   },
@@ -228,8 +288,20 @@
     "name": "Kasper - Labyrinth 3"
   },
   {
+    "id": "geometric",
+    "name": "Geometric"
+  },
+  {
+    "id": "geometry",
+    "name": "Geometry"
+  },
+  {
     "id": "glasses",
     "name": "Glasses"
+  },
+  {
+    "id": "good-and-bad",
+    "name": "Good And Bad"
   },
   {
     "id": "h",
@@ -252,6 +324,18 @@
     "name": "Kasper - Honeymoon"
   },
   {
+    "id": "infestival",
+    "name": "Infestival"
+  },
+  {
+    "id": "infinite",
+    "name": "Infinite"
+  },
+  {
+    "id": "into-the-void",
+    "name": "Into The Void"
+  },
+  {
     "id": "jabberwocky",
     "name": "Kasper - jabberwocky"
   },
@@ -270,6 +354,10 @@
   {
     "id": "logo",
     "name": "Kasper - Logo"
+  },
+  {
+    "id": "loop-forever",
+    "name": "Loop Forever"
   },
   {
     "id": "lost",
@@ -356,8 +444,20 @@
     "name": "Run, run!"
   },
   {
+    "id": "maze",
+    "name": "Maze"
+  },
+  {
     "id": "metation",
     "name": "Kasper - Carpe Diem"
+  },
+  {
+    "id": "mobile",
+    "name": "Mobile"
+  },
+  {
+    "id": "motherboard",
+    "name": "Motherboard"
   },
   {
     "id": "mouse1",
@@ -368,8 +468,16 @@
     "name": "Jan - Aim at it"
   },
   {
+    "id": "multiroom",
+    "name": "Multiroom"
+  },
+  {
     "id": "musique",
     "name": "Music"
+  },
+  {
+    "id": "mux",
+    "name": "Mux"
   },
   {
     "id": "net1",
@@ -384,6 +492,10 @@
     "name": "Computer"
   },
   {
+    "id": "ornimegalonyx",
+    "name": "Ornimegalonyx"
+  },
+  {
     "id": "paper",
     "name": "Kasper - Big 2"
   },
@@ -396,8 +508,16 @@
     "name": "Butterfly"
   },
   {
+    "id": "pass",
+    "name": "Pass"
+  },
+  {
     "id": "pastel",
     "name": "Kasper - Pastel"
+  },
+  {
+    "id": "peace",
+    "name": "Peace"
   },
   {
     "id": "penta",
@@ -460,8 +580,24 @@
     "name": "Kasper - Puckman"
   },
   {
+    "id": "pure-fight",
+    "name": "Pure Fight"
+  },
+  {
+    "id": "puzzle-for-kids",
+    "name": "Puzzle For Kids"
+  },
+  {
+    "id": "pxl",
+    "name": "Pxl"
+  },
+  {
     "id": "quaders",
     "name": "Jan - Quaders"
+  },
+  {
+    "id": "random-islands",
+    "name": "Random Islands"
   },
   {
     "id": "rect",
@@ -470,6 +606,10 @@
   {
     "id": "rectangle",
     "name": "Kasper - Rectangle 2"
+  },
+  {
+    "id": "rectangled",
+    "name": "Rectangled"
   },
   {
     "id": "rene02",
@@ -492,8 +632,20 @@
     "name": "Kasper - Rough"
   },
   {
+    "id": "rust",
+    "name": "Rust"
+  },
+  {
+    "id": "s-like-snake",
+    "name": "S Like Snake"
+  },
+  {
     "id": "sgdb",
     "name": "91700 SGDB"
+  },
+  {
+    "id": "sinusoid",
+    "name": "Sinusoid"
   },
   {
     "id": "skull",
@@ -508,12 +660,20 @@
     "name": "Kasper - Slimy"
   },
   {
+    "id": "small-rectangles",
+    "name": "Small Rectangles"
+  },
+  {
     "id": "smile",
     "name": "Kasper - Smile"
   },
   {
     "id": "sol",
     "name": "G"
+  },
+  {
+    "id": "solsystem",
+    "name": "Solsystem"
   },
   {
     "id": "solsystembyn",
@@ -528,12 +688,44 @@
     "name": "Bolognese"
   },
   {
+    "id": "spheral-cube",
+    "name": "Spheral Cube"
+  },
+  {
+    "id": "spiral",
+    "name": "Spiral"
+  },
+  {
+    "id": "spots",
+    "name": "Spots"
+  },
+  {
+    "id": "squares",
+    "name": "Squares"
+  },
+  {
     "id": "strike",
     "name": "Strike"
   },
   {
+    "id": "symetric-walls-double",
+    "name": "Symetric Walls Double"
+  },
+  {
+    "id": "symetric-walls-half",
+    "name": "Symetric Walls Half"
+  },
+  {
     "id": "tag",
     "name": "Jan - Three blocks"
+  },
+  {
+    "id": "the-old-genuine-lw-map",
+    "name": "The Old Genuine Lw Map"
+  },
+  {
+    "id": "thin-walls",
+    "name": "Thin Walls"
   },
   {
     "id": "tiles",
@@ -564,6 +756,10 @@
     "name": "Pipes"
   },
   {
+    "id": "ultra-multiroom",
+    "name": "Ultra Multiroom"
+  },
+  {
     "id": "underground",
     "name": "Kasper - Underground"
   },
@@ -584,8 +780,28 @@
     "name": "Window"
   },
   {
+    "id": "vortex",
+    "name": "Vortex"
+  },
+  {
     "id": "watch",
     "name": "Kasper - Watch"
+  },
+  {
+    "id": "wave",
+    "name": "Wave"
+  },
+  {
+    "id": "weird-walls",
+    "name": "Weird Walls"
+  },
+  {
+    "id": "world-geo",
+    "name": "World Geo"
+  },
+  {
+    "id": "world-sat",
+    "name": "World Sat"
   },
   {
     "id": "world1",

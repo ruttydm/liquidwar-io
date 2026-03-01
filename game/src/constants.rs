@@ -1,4 +1,4 @@
-pub const NB_TEAMS: usize = 6;
+pub const NB_TEAMS: usize = 32;
 pub const NB_DIRS: usize = 12;
 pub const MAX_FIGHTER_HEALTH: i16 = 16384;
 pub const AREA_START_GRADIENT: i32 = 2_000_000;
@@ -115,3 +115,8 @@ pub const DEFAULT_NUMBER_INFLUENCE: i32 = 8;
 pub const MAP_WIDTH: u32 = 320;
 pub const MAP_HEIGHT: u32 = 200;
 pub const MAX_PLAYERS: usize = NB_TEAMS;
+
+// Bitmap encoding constants for get_bitmap()/renderer
+pub const BITMAP_EMPTY: u8 = 0;
+pub const BITMAP_WALL: u8 = 254;
+pub const BITMAP_HEALTH_LEVELS: u8 = 7;

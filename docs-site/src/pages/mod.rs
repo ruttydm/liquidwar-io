@@ -1,0 +1,9 @@
+pub mod home;
+pub mod how_to_play;
+pub mod mechanics;
+pub mod maps_gallery;
+pub mod map_detail;
+pub mod settings;
+pub mod multiplayer;
+pub mod history;
+pub mod credits;

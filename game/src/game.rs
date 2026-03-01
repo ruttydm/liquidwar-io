@@ -20,6 +20,7 @@ pub struct GameState {
     pub fighter_new_health: u32,
     pub number_influence: i32,
     pub cursor_speed: i32,
+    pub fighter_number: usize, // index into FILL_TABLE (0-32)
 }
 
 impl GameState {
@@ -68,11 +69,14 @@ impl GameState {
             fighter_new_health: DEFAULT_FIGHTER_NEW_HEALTH,
             number_influence: DEFAULT_NUMBER_INFLUENCE,
             cursor_speed: 1,
+            fighter_number: DEFAULT_FIGHTER_NUMBER,
         }
     }
 
     /// Add a player. Places fighters in a spiral from the spawn point.
-    pub fn add_player(&mut self, player_id: usize) {
+    /// `total_teams` is the total number of teams that will be added, so each
+    /// team gets an equal share of the army.
+    pub fn add_player(&mut self, player_id: usize, total_teams: usize) {
         if player_id >= NB_TEAMS {
             return;
         }
@@ -80,24 +84,31 @@ impl GameState {
         let w = self.map.width as i32;
         let h = self.map.height as i32;
 
-        // Spawn positions matching LW5 place_team (6 positions):
-        // part 0: W/6, H/4    part 1: W/2, H/4    part 2: 5W/6, H/4
-        // part 3: W/6, 3H/4   part 4: W/2, 3H/4   part 5: 5W/6, 3H/4
-        let (sx, sy) = match player_id {
-            0 => (w / 6, h / 4),
-            1 => (w / 2, h / 4),
-            2 => (5 * w / 6, h / 4),
-            3 => (w / 6, 3 * h / 4),
-            4 => (w / 2, 3 * h / 4),
-            _ => (5 * w / 6, 3 * h / 4),
+        // Spawn positions: teams 0-5 use classic LW5 2x3 grid,
+        // teams 6+ use farthest-point heuristic for smart distribution
+        let (sx, sy) = if player_id < 6 {
+            let raw = match player_id {
+                0 => (w / 6, h / 4),
+                1 => (w / 2, h / 4),
+                2 => (5 * w / 6, h / 4),
+                3 => (w / 6, 3 * h / 4),
+                4 => (w / 2, 3 * h / 4),
+                _ => (5 * w / 6, 3 * h / 4),
+            };
+            self.find_passable_near(raw.0, raw.1)
+        } else {
+            let mut existing: Vec<(i32, i32)> = Vec::new();
+            for c in &self.cursors {
+                if c.active { existing.push((c.x, c.y)); }
+            }
+            self.find_farthest_spawn(&existing)
         };
 
         // Compute fighters per team from battle room and fill table
         let battle_room = self.mesh.battle_room();
-        let fill_pct = FILL_TABLE[DEFAULT_FIGHTER_NUMBER] as i32;
+        let fill_pct = FILL_TABLE[self.fighter_number.min(FILL_TABLE.len() - 1)] as i32;
         let total_fighters = (battle_room * fill_pct / 100).max(1);
-        let teams_so_far = self.playing_teams + 1;
-        let fighters_per_team = (total_fighters / teams_so_far as i32).max(1);
+        let fighters_per_team = (total_fighters / total_teams.max(1) as i32).max(1);
 
         let health = MAX_FIGHTER_HEALTH - 1;
         let team = player_id as i8;
@@ -200,6 +211,38 @@ impl GameState {
         self.fighters.push(Fighter::new(x as i16, y as i16, team, health));
         self.places[idx].fighter_idx = fighter_idx;
         true
+    }
+
+    /// Find the passable position farthest from all existing spawn points.
+    /// Samples every 4 pixels for performance.
+    fn find_farthest_spawn(&self, existing: &[(i32, i32)]) -> (i32, i32) {
+        let w = self.map.width as i32;
+        let h = self.map.height as i32;
+        let step = 4usize;
+        let mut best = (w / 2, h / 2);
+        let mut best_dist = 0i64;
+        let mut y = 2;
+        while y < h - 2 {
+            let mut x = 2;
+            while x < w - 2 {
+                if self.map.is_passable(x, y) {
+                    let min_d = existing.iter()
+                        .map(|(sx, sy)| {
+                            let dx = (x - sx) as i64;
+                            let dy = (y - sy) as i64;
+                            dx * dx + dy * dy
+                        })
+                        .min().unwrap_or(i64::MAX);
+                    if min_d > best_dist {
+                        best_dist = min_d;
+                        best = (x, y);
+                    }
+                }
+                x += step as i32;
+            }
+            y += step as i32;
+        }
+        best
     }
 
     fn find_passable_near(&self, x: i32, y: i32) -> (i32, i32) {
@@ -526,80 +569,47 @@ impl GameState {
         }
     }
 
-    /// Eliminate teams with 0 active fighters (matching LW5 check_loose_team).
+    /// Eliminate teams with 0 active fighters.
+    /// Unlike LW5, we do NOT shift team indices — this preserves stable
+    /// team→color mapping for the client renderer.
     fn check_loose_team(&mut self) {
-        // Find first team with 0 fighters
-        let mut lost_team: Option<usize> = None;
         for i in 0..self.playing_teams {
             if self.active_fighters[i] == 0 {
-                lost_team = Some(i);
-                break;
-            }
-        }
-
-        if let Some(team) = lost_team {
-            // Deactivate cursors for this team
-            for i in 0..NB_TEAMS {
-                if self.cursors[i].team == team && self.cursors[i].active {
-                    self.cursors[i].active = false;
-                    self.cursors[i].loose_time = self.global_clock;
-                    self.cursors[i].score_order = self.playing_teams as i32;
+                // Deactivate cursor for this team (if not already)
+                for c in 0..NB_TEAMS {
+                    if self.cursors[c].team == i && self.cursors[c].active {
+                        self.cursors[c].active = false;
+                        self.cursors[c].loose_time = self.global_clock;
+                    }
                 }
             }
-
-            // Shift down team indices for cursors above eliminated team
-            for i in 0..NB_TEAMS {
-                if self.cursors[i].team > team {
-                    self.cursors[i].team -= 1;
-                }
-            }
-
-            // Shift down team indices for fighters
-            for f in &mut self.fighters {
-                if (f.team as usize) > team {
-                    f.team -= 1;
-                }
-            }
-
-            // Shift active_fighters array
-            for j in team..self.playing_teams.saturating_sub(1) {
-                self.active_fighters[j] = self.active_fighters[j + 1];
-            }
-
-            // Shift mesh info arrays
-            for node in &mut self.mesh.nodes {
-                for j in team..self.playing_teams.saturating_sub(1) {
-                    node.info[j] = node.info[j + 1];
-                }
-            }
-
-            self.playing_teams -= 1;
         }
     }
 
     /// Produce per-cell bitmap for rendering.
-    /// Each byte: 0xFF = empty, 0xFE = wall, else (team << 4) | health_nibble
+    /// Encoding: 0 = empty, 254 = wall, 1..224 = fighter (team*7 + health_level + 1).
+    /// Supports up to 32 teams with 7 health brightness levels.
     pub fn get_bitmap(&self) -> Vec<u8> {
         let w = self.map.width;
         let h = self.map.height;
         let size = (w * h) as usize;
-        let mut buf = vec![0xFFu8; size];
+        let mut buf = vec![BITMAP_EMPTY; size];
 
         // Mark walls
         for i in 0..size {
             if !self.map.passable[i] {
-                buf[i] = 0xFE;
+                buf[i] = BITMAP_WALL;
             }
         }
 
         // Mark fighters
+        let hl = BITMAP_HEALTH_LEVELS as u32;
         for fighter in &self.fighters {
             let idx = fighter.y as usize * w as usize + fighter.x as usize;
             if idx < size {
-                let team_nibble = (fighter.team as u8 & 0x0F) << 4;
-                // Map health (0..16383) to nibble (0..15)
-                let health_nibble = ((fighter.health as u32 * 15) / (MAX_FIGHTER_HEALTH as u32 - 1)).min(15) as u8;
-                buf[idx] = team_nibble | health_nibble;
+                let team = fighter.team as u8;
+                let health_level = ((fighter.health as u32 * (hl - 1)) / (MAX_FIGHTER_HEALTH as u32 - 1)).min(hl - 1) as u8;
+                buf[idx] = team * BITMAP_HEALTH_LEVELS + health_level + 1;
             }
         }
 

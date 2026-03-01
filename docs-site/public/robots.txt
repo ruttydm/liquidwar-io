@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /docs/
+Sitemap: https://liquidwar.io/docs/sitemap.xml
