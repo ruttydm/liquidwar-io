@@ -1,6 +1,6 @@
 # Rust
-/crate/target/
-/crate/pkg/
+target/
+/client-wasm/pkg/
 **/*.rs.bk
 
 # Node / Bun

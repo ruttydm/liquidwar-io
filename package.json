@@ -1,26 +1,25 @@
 {
-  "name": "project-100",
+  "name": "liquid-war",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun run wasm:build && bun run --parallel dev:vite dev:wasm",
+    "dev": "bun run wasm:build && bun run --parallel dev:vite dev:wasm dev:server",
     "dev:vite": "vite",
-    "dev:wasm": "cargo watch -w crate/src -s \"wasm-pack build crate --target web --out-dir pkg --dev\"",
+    "dev:wasm": "cargo watch -w game/src -w client-wasm/src -s \"wasm-pack build client-wasm --target web --out-dir pkg --dev\"",
+    "dev:server": "cargo run --manifest-path server/Cargo.toml",
     "build": "bun run wasm:build && vite build",
-    "wasm:build": "wasm-pack build crate --target web --out-dir pkg",
-    "wasm:build:release": "wasm-pack build crate --target web --out-dir pkg --release",
+    "wasm:build": "wasm-pack build client-wasm --target web --out-dir pkg",
+    "wasm:build:release": "wasm-pack build client-wasm --target web --out-dir pkg --release",
     "preview": "vite preview",
-    "setup": "cargo install wasm-pack && cargo install cargo-watch"
+    "setup": "cargo install wasm-pack && cargo install cargo-watch",
+    "server": "cargo run --manifest-path server/Cargo.toml --release"
   },
   "devDependencies": {
-    "@types/three": "^0.183.0",
     "typescript": "^5.7.0",
     "vite": "^6.2.0",
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.5.0"
   },
-  "dependencies": {
-    "three": "^0.183.0"
-  }
+  "dependencies": {}
 }
