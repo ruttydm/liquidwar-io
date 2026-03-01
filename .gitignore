@@ -1,0 +1,21 @@
+# Rust
+/crate/target/
+/crate/pkg/
+**/*.rs.bk
+
+# Node / Bun
+node_modules/
+bun.lock
+
+# Vite
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
