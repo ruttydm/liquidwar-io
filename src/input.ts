@@ -72,27 +72,29 @@ export class InputHandler {
   private setupJoystick() {
     const zone = document.createElement("div");
     zone.id = "joystick-zone";
-    zone.style.cssText = "position:fixed;bottom:20px;right:20px;width:140px;height:140px;z-index:60;";
+    zone.style.cssText = "position:fixed;top:0;right:0;width:50%;height:100%;z-index:60;";
     document.body.appendChild(zone);
 
     this.joystickManager = nipplejs.create({
       zone,
-      mode: "static",
-      position: { right: "70px", bottom: "70px" },
+      mode: "dynamic",
       size: 120,
       color: "rgba(100,176,255,0.5)",
-      threshold: 0.3,
+      threshold: 0.1,
     });
 
-    this.joystickManager.on("dir", (_evt, data) => {
+    this.joystickManager.on("move", (_evt, data) => {
       this.joystickBits = 0;
-      const dir = data.direction;
-      if (dir) {
-        if (dir.y === "up") this.joystickBits |= KEY_UP;
-        if (dir.y === "down") this.joystickBits |= KEY_DOWN;
-        if (dir.x === "left") this.joystickBits |= KEY_LEFT;
-        if (dir.x === "right") this.joystickBits |= KEY_RIGHT;
+      if (data.force < 0.15) {
+        this.updateState();
+        return;
       }
+      // nipplejs: 0°=right, 90°=up, 180°=left, 270°=down
+      const deg = data.angle.degree;
+      if (deg >= 22.5 && deg < 157.5)  this.joystickBits |= KEY_UP;
+      if (deg >= 202.5 && deg < 337.5) this.joystickBits |= KEY_DOWN;
+      if (deg >= 112.5 && deg < 247.5) this.joystickBits |= KEY_LEFT;
+      if (deg >= 337.5 || deg < 67.5)  this.joystickBits |= KEY_RIGHT;
       this.updateState();
     });
 

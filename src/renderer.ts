@@ -387,7 +387,7 @@ export class Renderer {
     document.body.style.backgroundSize = "";
   }
 
-  render(bitmap: Uint8Array, cursors: Array<[number, number] | null>, scores?: number[]) {
+  render(bitmap: Uint8Array, cursors: Array<[number, number] | null>, scores?: number[], myTeam?: number) {
     const gl = this.gl;
 
     gl.useProgram(this.prog);
@@ -412,7 +412,7 @@ export class Renderer {
     this.syncOverlay();
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.overlay.width, this.overlay.height);
-    this.drawCursors(ctx, cursors);
+    this.drawCursors(ctx, cursors, myTeam);
 
     // Draw info bar on separate top canvas
     if (scores) {
@@ -421,7 +421,7 @@ export class Renderer {
     }
   }
 
-  private drawCursors(ctx: CanvasRenderingContext2D, cursors: Array<[number, number] | null>) {
+  private drawCursors(ctx: CanvasRenderingContext2D, cursors: Array<[number, number] | null>, myTeam?: number) {
     if (!this.cursorLoaded) return;
 
     const scaleX = this.canvas.width / this.mapWidth;
@@ -440,6 +440,19 @@ export class Renderer {
       ctx.filter = `hue-rotate(${TEAM_HUE_ROTATE[i % 32]}deg) saturate(1.5) brightness(1.2)`;
       ctx.drawImage(this.cursorImg, px, py, cursorSize, cursorSize);
       ctx.restore();
+
+      // Highlight ring around the local player's cursor
+      if (i === myTeam) {
+        ctx.save();
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 2;
+        ctx.shadowColor = TEAM_COLORS_CSS[i % 32];
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(px + cursorSize / 2, py + cursorSize / 2, cursorSize / 2 + 4, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
     }
   }
 

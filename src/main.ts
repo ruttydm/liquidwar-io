@@ -39,6 +39,7 @@ async function main() {
   let currentRoomCode: string | null = null;
   let isHost = false;
   let myConnId = -1;
+  let myTeam = -1;
   let lastLobbyUpdate: LobbyUpdateMsg | null = null;
   const audio = new AudioManager();
 
@@ -662,6 +663,7 @@ async function main() {
     lastLobbyUpdate = null;
     gameRunning = false;
     gameMenuOpen = false;
+    myTeam = -1;
 
     canvas.classList.add("hidden");
     gameOver.classList.add("hidden");
@@ -688,6 +690,7 @@ async function main() {
     gameMenuOpen = false;
     canvas.classList.remove("hidden");
     gameRunning = true;
+    myTeam = msg.playerId;
     renderer = new Renderer(canvas, msg.mapWidth, msg.mapHeight);
     input = new InputHandler(canvas);
     audio.playSfx("go");
@@ -745,7 +748,7 @@ async function main() {
 
   client.onState = (msg) => {
     if (!renderer) return;
-    renderer.render(msg.bitmap, msg.cursors, msg.scores);
+    renderer.render(msg.bitmap, msg.cursors, msg.scores, myTeam);
   };
 
   client.onGameOver = (msg) => {
