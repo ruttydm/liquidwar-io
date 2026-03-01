@@ -15,7 +15,7 @@ console_error_panic_hook = "0.1"
 wasm-opt = false
 
 [profile.release]
-opt-level = "s"
+opt-level = 3
 lto = true
 codegen-units = 1
 strip = true

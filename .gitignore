@@ -10,6 +10,9 @@ bun.lock
 # Vite
 dist/
 
+# Temp
+tmp/
+
 # OS
 .DS_Store
 Thumbs.db
