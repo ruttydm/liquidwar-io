@@ -14,6 +14,8 @@
         align-items: center;
         justify-content: center;
         height: 100vh;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        color: #e0e0e0;
       }
       canvas {
         display: block;
@@ -32,9 +34,87 @@
         border-radius: 4px;
         z-index: 10;
       }
+
+      /* Map selection overlay */
+      #lobby {
+        position: fixed;
+        inset: 0;
+        background: #0a0a1a;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-y: auto;
+      }
+      #lobby.hidden { display: none; }
+      #lobby h1 {
+        font-size: 2.5rem;
+        margin: 30px 0 8px;
+        color: #4287f5;
+        letter-spacing: 2px;
+      }
+      #lobby .subtitle {
+        color: #888;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+      }
+      #lobby .search {
+        width: 320px;
+        padding: 8px 14px;
+        border-radius: 6px;
+        border: 1px solid #333;
+        background: #1a1a2e;
+        color: #e0e0e0;
+        font-size: 1rem;
+        margin-bottom: 16px;
+        outline: none;
+      }
+      #lobby .search:focus { border-color: #4287f5; }
+      #map-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+        padding: 0 30px 40px;
+        max-width: 1100px;
+        width: 100%;
+      }
+      .map-card {
+        background: #1a1a2e;
+        border: 2px solid #2a2a40;
+        border-radius: 8px;
+        cursor: pointer;
+        overflow: hidden;
+        transition: border-color 0.15s, transform 0.1s;
+      }
+      .map-card:hover {
+        border-color: #4287f5;
+        transform: translateY(-2px);
+      }
+      .map-card img {
+        width: 100%;
+        aspect-ratio: 4/3;
+        object-fit: contain;
+        background: #111;
+        display: block;
+        image-rendering: pixelated;
+      }
+      .map-card .label {
+        padding: 6px 8px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
+    <div id="lobby">
+      <h1>LIQUID WAR</h1>
+      <p class="subtitle">Select a map to play</p>
+      <input class="search" type="text" placeholder="Search maps..." id="map-search" />
+      <div id="map-grid"></div>
+    </div>
     <div id="scoreboard"></div>
     <canvas id="game"></canvas>
     <script type="module" src="/src/main.ts"></script>

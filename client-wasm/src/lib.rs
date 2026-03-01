@@ -1,5 +1,6 @@
 use game::constants::*;
 use game::game::GameState;
+use game::map::Map;
 use js_sys::Uint8Array;
 use std::cell::RefCell;
 use wasm_bindgen::prelude::*;
@@ -23,10 +24,11 @@ pub fn map_height() -> u32 {
     MAP_HEIGHT
 }
 
-/// Create a new game. Call add_player() after.
+/// Create a new game with default obstacle map. Call add_player() after.
 #[wasm_bindgen]
 pub fn create_game() {
-    GAME.with(|g| *g.borrow_mut() = Some(GameState::new()));
+    let map = Map::with_obstacles(MAP_WIDTH, MAP_HEIGHT);
+    GAME.with(|g| *g.borrow_mut() = Some(GameState::new(map)));
 }
 
 #[wasm_bindgen]
@@ -39,7 +41,7 @@ pub fn add_player(player_id: u32) {
 }
 
 #[wasm_bindgen]
-pub fn set_cursor(player_id: u32, x: u32, y: u32) {
+pub fn set_cursor(player_id: u32, x: i32, y: i32) {
     GAME.with(|g| {
         if let Some(ref mut state) = *g.borrow_mut() {
             state.set_cursor(player_id as usize, x, y);
@@ -73,7 +75,7 @@ pub fn get_map_data() -> Uint8Array {
     GAME.with(|g| {
         let borrow = g.borrow();
         let state = borrow.as_ref().unwrap();
-        let data = state.map.to_bytes();
+        let data: Vec<u8> = state.map.passable.iter().map(|&p| if p { 0u8 } else { 1u8 }).collect();
         let arr = Uint8Array::new_with_length(data.len() as u32);
         arr.copy_from(&data);
         arr

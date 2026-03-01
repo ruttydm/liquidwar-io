@@ -1,9 +1,11 @@
-// Team colors [R, G, B]
+// Team colors [R, G, B] — 6 teams matching LW5
 const TEAM_COLORS = [
   [66, 135, 245], // Blue
   [245, 66, 66], // Red
   [66, 245, 96], // Green
   [245, 215, 66], // Yellow
+  [220, 66, 245], // Purple
+  [66, 245, 230], // Cyan
 ];
 const WALL_COLOR = [40, 40, 50];
 const BG_COLOR = [15, 15, 25];
@@ -23,11 +25,13 @@ uniform sampler2D u_bitmap;
 in vec2 v_uv;
 out vec4 fragColor;
 
-const vec3 teamColors[4] = vec3[4](
+const vec3 teamColors[6] = vec3[6](
   vec3(0.26, 0.53, 0.96),
   vec3(0.96, 0.26, 0.26),
   vec3(0.26, 0.96, 0.38),
-  vec3(0.96, 0.84, 0.26)
+  vec3(0.96, 0.84, 0.26),
+  vec3(0.86, 0.26, 0.96),
+  vec3(0.26, 0.96, 0.90)
 );
 const vec3 wallColor = vec3(0.16, 0.16, 0.20);
 const vec3 bgColor = vec3(0.06, 0.06, 0.10);
@@ -43,8 +47,8 @@ void main() {
   } else {
     int team = (byte >> 4) & 0xF;
     int health = byte & 0xF;
-    float brightness = 0.4 + 0.6 * float(health) / 10.0;
-    vec3 color = teamColors[team % 4] * brightness;
+    float brightness = 0.4 + 0.6 * float(health) / 15.0;
+    vec3 color = teamColors[team % 6] * brightness;
     fragColor = vec4(color, 1.0);
   }
 }`;

@@ -1,255 +1,596 @@
 use crate::constants::*;
-use crate::fighter::Fighter;
-use crate::gradient::GradientField;
+use crate::cursor::*;
+use crate::fighter::*;
 use crate::map::Map;
-
-pub struct Player {
-    pub cursor_x: u32,
-    pub cursor_y: u32,
-    pub active: bool,
-    pub fighter_count: u32,
-}
+use crate::mesh::Mesh;
 
 pub struct GameState {
     pub map: Map,
+    pub mesh: Mesh,
     pub fighters: Vec<Fighter>,
-    pub players: [Player; MAX_PLAYERS],
-    gradients: Vec<GradientField>,
-    pub tick: u32,
-    // Reusable combat buffer: [cell_idx * MAX_PLAYERS + team] = count
-    combat_buf: Vec<u16>,
+    pub places: Vec<Place>,
+    pub cursors: [Cursor; NB_TEAMS],
+    pub active_fighters: [i32; NB_TEAMS],
+    pub playing_teams: usize,
+    pub global_clock: i32,
+    pub army_size: i32,
+    // Config
+    pub fighter_attack: u32,
+    pub fighter_defense: u32,
+    pub fighter_new_health: u32,
+    pub number_influence: i32,
 }
 
 impl GameState {
-    pub fn new() -> Self {
-        let map = Map::with_obstacles(MAP_WIDTH, MAP_HEIGHT);
-        let mut gradients = Vec::with_capacity(MAX_PLAYERS);
-        for _ in 0..MAX_PLAYERS {
-            gradients.push(GradientField::new(MAP_WIDTH, MAP_HEIGHT));
+    pub fn new(map: Map) -> Self {
+        let w = map.width;
+        let h = map.height;
+        let size = (w * h) as usize;
+
+        // Build hierarchical mesh from map
+        let mut mesh = Mesh::build(&map);
+
+        // Create place array: link each pixel to its mesh node
+        let mut places = vec![Place::new(); size];
+        for (node_idx, node) in mesh.nodes.iter().enumerate() {
+            // A mesh node covers a square from (x, y) to (x + size - 1, y + size - 1)
+            let nx = node.x as i32;
+            let ny = node.y as i32;
+            let ns = node.size;
+            for dy in 0..ns {
+                for dx in 0..ns {
+                    let px = nx + dx;
+                    let py = ny + dy;
+                    if px >= 0 && px < w as i32 && py >= 0 && py < h as i32 {
+                        let pi = (py as u32 * w + px as u32) as usize;
+                        places[pi].mesh_idx = node_idx as i32;
+                    }
+                }
+            }
         }
-        let combat_buf = vec![0u16; (MAP_WIDTH * MAP_HEIGHT) as usize * MAX_PLAYERS];
+
+        mesh.reset_gradients();
+        mesh.reset_directions();
 
         GameState {
             map,
+            mesh,
             fighters: Vec::new(),
-            players: std::array::from_fn(|_| Player {
-                cursor_x: 0,
-                cursor_y: 0,
-                active: false,
-                fighter_count: 0,
-            }),
-            gradients,
-            tick: 0,
-            combat_buf,
+            places,
+            cursors: std::array::from_fn(|_| Cursor::new()),
+            active_fighters: [0; NB_TEAMS],
+            playing_teams: 0,
+            global_clock: 2, // LW5 starts at 2
+            army_size: 0,
+            fighter_attack: DEFAULT_FIGHTER_ATTACK,
+            fighter_defense: DEFAULT_FIGHTER_DEFENSE,
+            fighter_new_health: DEFAULT_FIGHTER_NEW_HEALTH,
+            number_influence: DEFAULT_NUMBER_INFLUENCE,
         }
     }
 
+    /// Add a player. Places fighters in a spiral from the spawn point.
     pub fn add_player(&mut self, player_id: usize) {
-        if player_id >= MAX_PLAYERS {
+        if player_id >= NB_TEAMS {
             return;
         }
 
-        let (spawn_cx, spawn_cy) = match player_id {
-            0 => (MAP_WIDTH / 4, MAP_HEIGHT / 4),
-            1 => (3 * MAP_WIDTH / 4, 3 * MAP_HEIGHT / 4),
-            2 => (3 * MAP_WIDTH / 4, MAP_HEIGHT / 4),
-            3 => (MAP_WIDTH / 4, 3 * MAP_HEIGHT / 4),
-            _ => return,
+        let w = self.map.width as i32;
+        let h = self.map.height as i32;
+
+        // Spawn positions matching LW5 place_team (6 positions):
+        // part 0: W/6, H/4    part 1: W/2, H/4    part 2: 5W/6, H/4
+        // part 3: W/6, 3H/4   part 4: W/2, 3H/4   part 5: 5W/6, 3H/4
+        let (sx, sy) = match player_id {
+            0 => (w / 6, h / 4),
+            1 => (w / 2, h / 4),
+            2 => (5 * w / 6, h / 4),
+            3 => (w / 6, 3 * h / 4),
+            4 => (w / 2, 3 * h / 4),
+            _ => (5 * w / 6, 3 * h / 4),
         };
 
-        self.players[player_id].active = true;
-        self.players[player_id].cursor_x = spawn_cx;
-        self.players[player_id].cursor_y = spawn_cy;
+        // Compute fighters per team from battle room and fill table
+        let battle_room = self.mesh.battle_room();
+        let fill_pct = FILL_TABLE[DEFAULT_FIGHTER_NUMBER] as i32;
+        let total_fighters = (battle_room * fill_pct / 100).max(1);
+        let teams_so_far = self.playing_teams + 1;
+        let fighters_per_team = (total_fighters / teams_so_far as i32).max(1);
 
-        let spawn_radius = ((FIGHTERS_PER_PLAYER as f32).sqrt() / 2.0) as u32 + 1;
-        let mut count = 0u32;
+        let health = MAX_FIGHTER_HEALTH - 1;
+        let team = player_id as i8;
+        let mut placed = 0i32;
 
-        for dy in 0..spawn_radius * 2 {
-            for dx in 0..spawn_radius * 2 {
-                if count >= FIGHTERS_PER_PLAYER {
-                    break;
+        // Spiral placement (matching LW5 army.c place_team)
+        let mut x_min = sx;
+        let mut x_max = sx;
+        let mut y_min = sy;
+        let mut y_max = sy;
+
+        while placed < fighters_per_team {
+            // Top edge: left to right at y_min
+            let mut x = x_min;
+            while x <= x_max && placed < fighters_per_team {
+                if self.try_add_fighter(x, y_min, team, health) {
+                    placed += 1;
                 }
-                let x = spawn_cx.saturating_sub(spawn_radius) + dx;
-                let y = spawn_cy.saturating_sub(spawn_radius) + dy;
-                if x > 0 && x < MAP_WIDTH - 1 && y > 0 && y < MAP_HEIGHT - 1 && self.map.is_open(x, y) {
-                    self.fighters.push(Fighter {
-                        x: x as u16,
-                        y: y as u16,
-                        team: player_id as u8,
-                        health: FIGHTER_MAX_HEALTH,
-                    });
-                    count += 1;
+                x += 1;
+            }
+            if x_max < w - 2 {
+                x_max += 1;
+            }
+
+            // Right edge: top to bottom at x_max
+            let mut y = y_min;
+            while y <= y_max && placed < fighters_per_team {
+                if self.try_add_fighter(x_max, y, team, health) {
+                    placed += 1;
                 }
+                y += 1;
+            }
+            if y_max < h - 2 {
+                y_max += 1;
+            }
+
+            // Bottom edge: right to left at y_max
+            x = x_max;
+            while x >= x_min && placed < fighters_per_team {
+                if self.try_add_fighter(x, y_max, team, health) {
+                    placed += 1;
+                }
+                x -= 1;
+            }
+            if x_min > 1 {
+                x_min -= 1;
+            }
+
+            // Left edge: bottom to top at x_min
+            y = y_max;
+            while y >= y_min && placed < fighters_per_team {
+                if self.try_add_fighter(x_min, y, team, health) {
+                    placed += 1;
+                }
+                y -= 1;
+            }
+            if y_min > 1 {
+                y_min -= 1;
+            }
+
+            // Safety: if spiral has expanded to map bounds and still can't place, break
+            if x_min <= 1 && x_max >= w - 2 && y_min <= 1 && y_max >= h - 2 {
+                break;
+            }
+        }
+
+        // Init cursor at center of mass of placed fighters
+        let mut cx = 0i64;
+        let mut cy = 0i64;
+        let mut count = 0i64;
+        for f in &self.fighters {
+            if f.team == team {
+                cx += f.x as i64;
+                cy += f.y as i64;
+                count += 1;
+            }
+        }
+        if count > 0 {
+            let avg_x = (cx / count) as i32;
+            let avg_y = (cy / count) as i32;
+            // Spiral outward to find a passable position for the cursor
+            let (cur_x, cur_y) = self.find_passable_near(avg_x, avg_y);
+            self.cursors[player_id].init(player_id, cur_x, cur_y);
+        }
+
+        self.playing_teams += 1;
+        self.army_size = self.fighters.len() as i32;
+    }
+
+    fn try_add_fighter(&mut self, x: i32, y: i32, team: i8, health: i16) -> bool {
+        if x < 1 || y < 1 || x >= self.map.width as i32 - 1 || y >= self.map.height as i32 - 1 {
+            return false;
+        }
+        let idx = self.map.idx(x, y);
+        if self.places[idx].mesh_idx < 0 || self.places[idx].fighter_idx >= 0 {
+            return false;
+        }
+
+        let fighter_idx = self.fighters.len() as i32;
+        self.fighters.push(Fighter::new(x as i16, y as i16, team, health));
+        self.places[idx].fighter_idx = fighter_idx;
+        true
+    }
+
+    fn find_passable_near(&self, x: i32, y: i32) -> (i32, i32) {
+        if self.map.is_passable(x, y) {
+            return (x, y);
+        }
+        // Spiral search
+        for r in 1..100 {
+            for dx in -r..=r {
+                for &dy in &[-r, r] {
+                    let nx = x + dx;
+                    let ny = y + dy;
+                    if self.map.is_passable(nx, ny) {
+                        return (nx, ny);
+                    }
+                }
+            }
+            for dy in -r + 1..r {
+                for &dx in &[-r, r] {
+                    let nx = x + dx;
+                    let ny = y + dy;
+                    if self.map.is_passable(nx, ny) {
+                        return (nx, ny);
+                    }
+                }
+            }
+        }
+        (x, y)
+    }
+
+    /// Set cursor position directly (for server-mode: client sends absolute position).
+    pub fn set_cursor(&mut self, player_id: usize, x: i32, y: i32) {
+        if player_id < NB_TEAMS && self.cursors[player_id].active {
+            let w = self.map.width as i32;
+            let h = self.map.height as i32;
+            let new_x = x.clamp(1, w - 2);
+            let new_y = y.clamp(1, h - 2);
+
+            let old_x = self.cursors[player_id].x;
+            let old_y = self.cursors[player_id].y;
+            let moved = new_x != old_x || new_y != old_y;
+
+            // Mark old mesh position as needing update
+            let old_idx = self.map.idx(old_x, old_y);
+            let old_mesh = self.places[old_idx].mesh_idx;
+            if old_mesh >= 0 {
+                self.mesh.nodes[old_mesh as usize].info[player_id].update_time = -1;
+            }
+
+            self.cursors[player_id].x = new_x;
+            self.cursors[player_id].y = new_y;
+
+            // Store cursor position in new mesh node
+            let new_idx = self.map.idx(new_x, new_y);
+            let new_mesh = self.places[new_idx].mesh_idx;
+            if new_mesh >= 0 {
+                let info = &mut self.mesh.nodes[new_mesh as usize].info[player_id];
+                info.cursor_x = new_x as i16;
+                info.cursor_y = new_y as i16;
+                info.update_time = 1; // positive = cursor is here
+            }
+
+            // Decrement cursor val when moved or every 13 ticks
+            if moved || (self.global_clock % (NB_DIRS as i32 + 1)) == 0 {
+                self.cursors[player_id].val -= 1;
             }
         }
     }
 
-    pub fn set_cursor(&mut self, player_id: usize, x: u32, y: u32) {
-        if player_id < MAX_PLAYERS && self.players[player_id].active {
-            self.players[player_id].cursor_x = x.min(MAP_WIDTH - 1);
-            self.players[player_id].cursor_y = y.min(MAP_HEIGHT - 1);
-        }
-    }
-
+    /// One game tick (matching LW5 logic() exactly).
     pub fn tick(&mut self) {
-        self.tick += 1;
-        self.compute_gradients();
+        // Step 1: move_all_cursors — handled externally via set_cursor()
+
+        // Step 2: apply_all_cursor — poke cursor values into mesh
+        self.apply_all_cursors();
+
+        // Step 3: spread_single_gradient — one direction per tick
+        self.mesh.spread_gradient(self.global_clock, self.playing_teams);
+
+        // Step 4: move_fighters — movement + combat + healing
         self.move_fighters();
-        self.resolve_combat();
-        self.heal_fighters();
-        self.update_counts();
+
+        // Step 5: check_loose_team — eliminate teams with 0 fighters
+        self.check_loose_team();
+
+        // Step 6: increment clock
+        self.global_clock += 1;
     }
 
-    fn compute_gradients(&mut self) {
-        for i in 0..MAX_PLAYERS {
-            if self.players[i].active {
-                self.gradients[i].compute(
-                    &self.map,
-                    self.players[i].cursor_x,
-                    self.players[i].cursor_y,
-                );
+    /// Poke cursor gradient values into the mesh (matching LW5 apply_all_cursor).
+    fn apply_all_cursors(&mut self) {
+        for i in 0..NB_TEAMS {
+            if self.cursors[i].active {
+                let x = self.cursors[i].x;
+                let y = self.cursors[i].y;
+                let idx = self.map.idx(x, y);
+                let mesh_idx = self.places[idx].mesh_idx;
+                if mesh_idx >= 0 {
+                    self.mesh.nodes[mesh_idx as usize].info[self.cursors[i].team].grad =
+                        self.cursors[i].val;
+                }
             }
         }
     }
 
+    /// Move all fighters (matching LW5 fighter.c move_fighters).
     fn move_fighters(&mut self) {
-        for fighter in self.fighters.iter_mut() {
-            let team = fighter.team as usize;
-            if team >= MAX_PLAYERS || !self.players[team].active {
+        let start_base = ((self.global_clock / 6) % NB_DIRS as i32) as usize;
+        let table = ((self.global_clock / 3) % 2) as usize;
+        let mut sens: usize = 0;
+        let mut start = start_base;
+
+        // Compute combat parameters
+        let (attack, defense, new_health) = compute_combat_params(
+            &self.active_fighters,
+            self.playing_teams,
+            self.army_size,
+            self.fighter_attack,
+            self.fighter_defense,
+            self.fighter_new_health,
+            self.number_influence,
+        );
+
+        // Reset active fighter counts
+        for a in self.active_fighters.iter_mut() {
+            *a = 0;
+        }
+
+        let w = self.map.width as i32;
+
+        for fi in 0..self.fighters.len() {
+            let team = self.fighters[fi].team as usize;
+            if team >= self.playing_teams {
                 continue;
             }
 
-            let (dx, dy) = self.gradients[team].best_direction(
-                &self.map,
-                fighter.x as u32,
-                fighter.y as u32,
-            );
+            self.active_fighters[team] += 1;
+            start = if start < NB_DIRS - 1 { start + 1 } else { 0 };
 
-            let new_x = (fighter.x as i32 + dx).clamp(1, (MAP_WIDTH - 2) as i32) as u16;
-            let new_y = (fighter.y as i32 + dy).clamp(1, (MAP_HEIGHT - 2) as i32) as u16;
-
-            if self.map.is_open(new_x as u32, new_y as u32) {
-                fighter.x = new_x;
-                fighter.y = new_y;
+            let fx = self.fighters[fi].x as i32;
+            let fy = self.fighters[fi].y as i32;
+            let place_idx = (fy * w + fx) as usize;
+            let mesh_idx = self.places[place_idx].mesh_idx;
+            if mesh_idx < 0 {
+                continue;
             }
-        }
-    }
+            let mi = mesh_idx as usize;
 
-    fn resolve_combat(&mut self) {
-        // Clear combat buffer
-        for v in self.combat_buf.iter_mut() {
-            *v = 0;
-        }
+            // Determine direction
+            let update_time = self.mesh.nodes[mi].info[team].update_time;
+            if update_time >= 0 {
+                // Cursor is on this mesh cell: use close_dir
+                let dir = self.mesh.get_close_dir(
+                    mi,
+                    self.fighters[fi].x,
+                    self.fighters[fi].y,
+                    team,
+                    (sens % 2) != 0,
+                    start,
+                );
+                self.mesh.nodes[mi].info[team].dir = dir as i8;
+                sens += 1;
+            } else if (-update_time) < self.global_clock {
+                // Direction is stale: recompute from gradient
+                let dir = self.mesh.get_main_dir(mi, team, (sens % 2) != 0, start);
+                self.mesh.nodes[mi].info[team].dir = dir as i8;
+                self.mesh.nodes[mi].info[team].update_time = -self.global_clock;
+                sens += 1;
+            }
 
-        // Count fighters per team per cell
-        for fighter in &self.fighters {
-            let idx = fighter.y as usize * MAP_WIDTH as usize + fighter.x as usize;
-            self.combat_buf[idx * MAX_PLAYERS + fighter.team as usize] += 1;
-        }
+            let dir = self.mesh.nodes[mi].info[team].dir as usize;
 
-        // Apply combat
-        for fighter in self.fighters.iter_mut() {
-            let idx = fighter.y as usize * MAP_WIDTH as usize + fighter.x as usize;
-            let my_team = fighter.team as usize;
+            // Try 5 movement directions
+            let move_dirs = MOVE_DIR[table][dir];
+            let mut moved = false;
 
-            let mut enemy_count = 0u16;
-            for t in 0..MAX_PLAYERS {
-                if t != my_team {
-                    enemy_count += self.combat_buf[idx * MAX_PLAYERS + t];
+            // Try each of the 5 priority directions for movement
+            let mut try_results: [(i32, i32, usize); 5] = [(0, 0, 0); 5];
+            for p in 0..5 {
+                let try_dir = move_dirs[p];
+                let dx = DIR_X[try_dir];
+                let dy = DIR_Y[try_dir];
+                let nx = fx + dx;
+                let ny = fy + dy;
+                let ni = (ny * w + nx) as usize;
+                try_results[p] = (nx, ny, ni);
+            }
+
+            // Try to move to an empty passable cell
+            for p in 0..5 {
+                let (nx, ny, ni) = try_results[p];
+                if nx >= 0
+                    && ny >= 0
+                    && nx < w
+                    && ny < self.map.height as i32
+                    && self.places[ni].mesh_idx >= 0
+                    && self.places[ni].fighter_idx < 0
+                {
+                    // Move fighter
+                    self.places[place_idx].fighter_idx = -1;
+                    self.places[ni].fighter_idx = fi as i32;
+                    self.fighters[fi].x = nx as i16;
+                    self.fighters[fi].y = ny as i16;
+                    moved = true;
+                    break;
                 }
             }
 
-            if enemy_count > 0 {
-                let damage = (enemy_count as u8).min(ATTACK_DAMAGE).min(fighter.health);
-                fighter.health = fighter.health.saturating_sub(damage);
+            if moved {
+                continue;
+            }
 
-                if fighter.health == 0 {
-                    // Convert to dominant enemy team
-                    let mut best_team = my_team;
-                    let mut best_count = 0u16;
-                    for t in 0..MAX_PLAYERS {
-                        if t != my_team {
-                            let c = self.combat_buf[idx * MAX_PLAYERS + t];
-                            if c > best_count {
-                                best_count = c;
-                                best_team = t;
-                            }
+            // All 5 directions blocked — try attack then heal
+            // Front attack (p0, full damage)
+            let (_, _, ni0) = try_results[0];
+            if ni0 < self.places.len()
+                && self.places[ni0].mesh_idx >= 0
+                && self.places[ni0].fighter_idx >= 0
+            {
+                let target_fi = self.places[ni0].fighter_idx as usize;
+                if self.fighters[target_fi].team as usize != team {
+                    // Front attack: full damage
+                    self.fighters[target_fi].health -= attack[team] as i16;
+                    if self.fighters[target_fi].health < 0 {
+                        while self.fighters[target_fi].health < 0 {
+                            self.fighters[target_fi].health += new_health[team] as i16;
                         }
+                        self.fighters[target_fi].team = team as i8;
                     }
-                    fighter.team = best_team as u8;
-                    fighter.health = FIGHTER_MAX_HEALTH / 2;
+                    continue;
                 }
             }
-        }
-    }
 
-    fn heal_fighters(&mut self) {
-        for fighter in self.fighters.iter_mut() {
-            if fighter.health < FIGHTER_MAX_HEALTH {
-                // Check if no enemies at this cell
-                let idx = fighter.y as usize * MAP_WIDTH as usize + fighter.x as usize;
-                let my_team = fighter.team as usize;
-                let mut has_enemy = false;
-                for t in 0..MAX_PLAYERS {
-                    if t != my_team && self.combat_buf[idx * MAX_PLAYERS + t] > 0 {
-                        has_enemy = true;
-                        break;
+            // Side attack p1 (damage >> SIDE_ATTACK_FACTOR)
+            let (_, _, ni1) = try_results[1];
+            if ni1 < self.places.len()
+                && self.places[ni1].mesh_idx >= 0
+                && self.places[ni1].fighter_idx >= 0
+            {
+                let target_fi = self.places[ni1].fighter_idx as usize;
+                if self.fighters[target_fi].team as usize != team {
+                    let side_damage = (attack[team] >> SIDE_ATTACK_FACTOR).max(1) as i16;
+                    self.fighters[target_fi].health -= side_damage;
+                    if self.fighters[target_fi].health < 0 {
+                        while self.fighters[target_fi].health < 0 {
+                            self.fighters[target_fi].health += new_health[team] as i16;
+                        }
+                        self.fighters[target_fi].team = team as i8;
+                    }
+                    continue;
+                }
+            }
+
+            // Side attack p2 (damage >> SIDE_ATTACK_FACTOR)
+            let (_, _, ni2) = try_results[2];
+            if ni2 < self.places.len()
+                && self.places[ni2].mesh_idx >= 0
+                && self.places[ni2].fighter_idx >= 0
+            {
+                let target_fi = self.places[ni2].fighter_idx as usize;
+                if self.fighters[target_fi].team as usize != team {
+                    let side_damage = (attack[team] >> SIDE_ATTACK_FACTOR).max(1) as i16;
+                    self.fighters[target_fi].health -= side_damage;
+                    if self.fighters[target_fi].health < 0 {
+                        while self.fighters[target_fi].health < 0 {
+                            self.fighters[target_fi].health += new_health[team] as i16;
+                        }
+                        self.fighters[target_fi].team = team as i8;
+                    }
+                    continue;
+                }
+            }
+
+            // Heal: if p0 has a friendly fighter
+            if ni0 < self.places.len()
+                && self.places[ni0].mesh_idx >= 0
+                && self.places[ni0].fighter_idx >= 0
+            {
+                let target_fi = self.places[ni0].fighter_idx as usize;
+                if self.fighters[target_fi].team as usize == team {
+                    self.fighters[target_fi].health += defense[team] as i16;
+                    if self.fighters[target_fi].health >= MAX_FIGHTER_HEALTH {
+                        self.fighters[target_fi].health = MAX_FIGHTER_HEALTH - 1;
                     }
                 }
-                if !has_enemy {
-                    fighter.health = (fighter.health + HEAL_AMOUNT).min(FIGHTER_MAX_HEALTH);
+            }
+        }
+    }
+
+    /// Eliminate teams with 0 active fighters (matching LW5 check_loose_team).
+    fn check_loose_team(&mut self) {
+        // Find first team with 0 fighters
+        let mut lost_team: Option<usize> = None;
+        for i in 0..self.playing_teams {
+            if self.active_fighters[i] == 0 {
+                lost_team = Some(i);
+                break;
+            }
+        }
+
+        if let Some(team) = lost_team {
+            // Deactivate cursors for this team
+            for i in 0..NB_TEAMS {
+                if self.cursors[i].team == team && self.cursors[i].active {
+                    self.cursors[i].active = false;
+                    self.cursors[i].loose_time = self.global_clock;
+                    self.cursors[i].score_order = self.playing_teams as i32;
                 }
             }
-        }
-    }
 
-    fn update_counts(&mut self) {
-        for p in self.players.iter_mut() {
-            p.fighter_count = 0;
-        }
-        for fighter in &self.fighters {
-            let t = fighter.team as usize;
-            if t < MAX_PLAYERS {
-                self.players[t].fighter_count += 1;
+            // Shift down team indices for cursors above eliminated team
+            for i in 0..NB_TEAMS {
+                if self.cursors[i].team > team {
+                    self.cursors[i].team -= 1;
+                }
             }
+
+            // Shift down team indices for fighters
+            for f in &mut self.fighters {
+                if (f.team as usize) > team {
+                    f.team -= 1;
+                }
+            }
+
+            // Shift active_fighters array
+            for j in team..self.playing_teams.saturating_sub(1) {
+                self.active_fighters[j] = self.active_fighters[j + 1];
+            }
+
+            // Shift mesh info arrays
+            for node in &mut self.mesh.nodes {
+                for j in team..self.playing_teams.saturating_sub(1) {
+                    node.info[j] = node.info[j + 1];
+                }
+            }
+
+            self.playing_teams -= 1;
         }
     }
 
-    /// Produce per-cell bitmap. Each byte:
-    /// 0xFE = wall, 0xFF = empty, else (team << 4) | health
+    /// Produce per-cell bitmap for rendering.
+    /// Each byte: 0xFF = empty, 0xFE = wall, else (team << 4) | health_nibble
     pub fn get_bitmap(&self) -> Vec<u8> {
-        let size = (MAP_WIDTH * MAP_HEIGHT) as usize;
+        let w = self.map.width;
+        let h = self.map.height;
+        let size = (w * h) as usize;
         let mut buf = vec![0xFFu8; size];
 
         // Mark walls
         for i in 0..size {
-            if self.map.cells[i] == crate::map::Cell::Wall {
+            if !self.map.passable[i] {
                 buf[i] = 0xFE;
             }
         }
 
-        // Mark fighters (last writer wins per cell — good enough)
+        // Mark fighters
         for fighter in &self.fighters {
-            let idx = fighter.y as usize * MAP_WIDTH as usize + fighter.x as usize;
-            buf[idx] = ((fighter.team & 0x0F) << 4) | (fighter.health & 0x0F);
+            let idx = fighter.y as usize * w as usize + fighter.x as usize;
+            if idx < size {
+                let team_nibble = (fighter.team as u8 & 0x0F) << 4;
+                // Map health (0..16383) to nibble (0..15)
+                let health_nibble = ((fighter.health as u32 * 15) / (MAX_FIGHTER_HEALTH as u32 - 1)).min(15) as u8;
+                buf[idx] = team_nibble | health_nibble;
+            }
         }
 
         buf
     }
 
-    pub fn get_scores(&self) -> [u32; MAX_PLAYERS] {
-        let mut scores = [0u32; MAX_PLAYERS];
-        for (i, p) in self.players.iter().enumerate() {
-            scores[i] = p.fighter_count;
+    pub fn get_scores(&self) -> [u32; NB_TEAMS] {
+        let mut scores = [0u32; NB_TEAMS];
+        for f in &self.fighters {
+            let t = f.team as usize;
+            if t < NB_TEAMS {
+                scores[t] += 1;
+            }
         }
         scores
     }
 
-    pub fn get_cursors(&self) -> [(u32, u32, bool); MAX_PLAYERS] {
-        let mut cursors = [(0u32, 0u32, false); MAX_PLAYERS];
-        for (i, p) in self.players.iter().enumerate() {
-            cursors[i] = (p.cursor_x, p.cursor_y, p.active);
+    pub fn get_cursors(&self) -> [(i32, i32, bool); NB_TEAMS] {
+        let mut result = [(0i32, 0i32, false); NB_TEAMS];
+        for (i, c) in self.cursors.iter().enumerate() {
+            result[i] = (c.x, c.y, c.active);
         }
-        cursors
+        result
+    }
+
+    pub fn map_width(&self) -> u32 {
+        self.map.width
+    }
+
+    pub fn map_height(&self) -> u32 {
+        self.map.height
     }
 }

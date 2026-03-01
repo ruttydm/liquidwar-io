@@ -1,9 +1,20 @@
+export interface MapInfo {
+  id: string;
+  name: string;
+}
+
+export interface MapListMsg {
+  type: "map_list";
+  maps: MapInfo[];
+}
+
 export interface WelcomeMsg {
   type: "welcome";
   playerId: number;
   mapWidth: number;
   mapHeight: number;
   mapData: number[];
+  mapId: string;
 }
 
 export interface StateMsg {
@@ -25,10 +36,16 @@ export interface PlayerLeftMsg {
   playerId: number;
 }
 
-export type ServerMsg = WelcomeMsg | StateMsg | PlayerJoinedMsg | PlayerLeftMsg;
+export type ServerMsg =
+  | MapListMsg
+  | WelcomeMsg
+  | StateMsg
+  | PlayerJoinedMsg
+  | PlayerLeftMsg;
 
 export class GameClient {
   private ws: WebSocket;
+  public onMapList: ((msg: MapListMsg) => void) | null = null;
   public onWelcome: ((msg: WelcomeMsg) => void) | null = null;
   public onState: ((msg: StateMsg) => void) | null = null;
   public onOpen: (() => void) | null = null;
@@ -43,6 +60,9 @@ export class GameClient {
     this.ws.onmessage = (event) => {
       const msg: ServerMsg = JSON.parse(event.data);
       switch (msg.type) {
+        case "map_list":
+          this.onMapList?.(msg);
+          break;
         case "welcome":
           this.onWelcome?.(msg);
           break;
@@ -58,7 +78,15 @@ export class GameClient {
   }
 
   sendCursor(x: number, y: number) {
-    this.send({ type: "cursor", x, y });
+    this.send({ type: "cursor", x: Math.round(x), y: Math.round(y) });
+  }
+
+  sendSelectMap(id: string) {
+    this.send({ type: "select_map", id });
+  }
+
+  sendStartGame() {
+    this.send({ type: "start_game" });
   }
 
   private send(msg: object) {

@@ -2,8 +2,10 @@ use base64::Engine;
 use futures_util::{SinkExt, StreamExt};
 use game::constants::*;
 use game::game::GameState;
+use game::map::Map;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use tokio::net::TcpListener;
 use tokio::sync::{mpsc, Mutex};
@@ -11,18 +13,70 @@ use tokio::time::{interval, Duration};
 use tokio_tungstenite::accept_async;
 use tokio_tungstenite::tungstenite::Message;
 
+/// LW5 threshold: 6*R + 3*G + B > 315 means passable (light)
+fn load_map_from_png(path: &Path) -> Map {
+    let img = image::open(path).expect("Failed to load map image");
+    let rgb = img.to_rgb8();
+    let width = rgb.width();
+    let height = rgb.height();
+
+    let mut passable = vec![false; (width * height) as usize];
+    for (i, pixel) in rgb.pixels().enumerate() {
+        let r = pixel[0] as u32;
+        let g = pixel[1] as u32;
+        let b = pixel[2] as u32;
+        passable[i] = (6 * r + 3 * g + b) > 315;
+    }
+
+    // Ensure border is wall
+    for x in 0..width {
+        passable[x as usize] = false;
+        passable[((height - 1) * width + x) as usize] = false;
+    }
+    for y in 0..height {
+        passable[(y * width) as usize] = false;
+        passable[(y * width + width - 1) as usize] = false;
+    }
+
+    Map::new(width, height, passable)
+}
+
+#[derive(Deserialize, Serialize, Clone)]
+struct MapInfo {
+    id: String,
+    name: String,
+}
+
+fn load_map_index(maps_dir: &Path) -> Vec<MapInfo> {
+    let index_path = maps_dir.join("index.json");
+    if index_path.exists() {
+        if let Ok(data) = std::fs::read_to_string(&index_path) {
+            if let Ok(entries) = serde_json::from_str::<Vec<MapInfo>>(&data) {
+                return entries;
+            }
+        }
+    }
+    Vec::new()
+}
+
 #[derive(Deserialize)]
 #[serde(tag = "type")]
 enum ClientMsg {
     #[serde(rename = "join")]
     Join { name: String },
     #[serde(rename = "cursor")]
-    Cursor { x: u32, y: u32 },
+    Cursor { x: i32, y: i32 },
+    #[serde(rename = "select_map")]
+    SelectMap { id: String },
+    #[serde(rename = "start_game")]
+    StartGame,
 }
 
 #[derive(Serialize, Clone)]
 #[serde(tag = "type")]
 enum ServerMsg {
+    #[serde(rename = "map_list")]
+    MapList { maps: Vec<MapInfo> },
     #[serde(rename = "welcome")]
     Welcome {
         #[serde(rename = "playerId")]
@@ -33,13 +87,15 @@ enum ServerMsg {
         map_height: u32,
         #[serde(rename = "mapData")]
         map_data: Vec<u8>,
+        #[serde(rename = "mapId")]
+        map_id: String,
     },
     #[serde(rename = "state")]
     State {
-        tick: u32,
-        bitmap: String, // base64-encoded
-        scores: [u32; MAX_PLAYERS],
-        cursors: Vec<Option<(u32, u32)>>,
+        tick: i32,
+        bitmap: String,
+        scores: [u32; NB_TEAMS],
+        cursors: Vec<Option<(i32, i32)>>,
     },
     #[serde(rename = "player_joined")]
     PlayerJoined {
@@ -61,38 +117,67 @@ struct PlayerSlot {
 }
 
 struct Room {
-    game: GameState,
+    game: Option<GameState>,
     players: HashMap<usize, PlayerSlot>,
-    next_id: usize,
     map_data: Vec<u8>,
+    map_index: Vec<MapInfo>,
+    maps_dir: PathBuf,
+    current_map_id: String,
 }
 
 impl Room {
-    fn new() -> Self {
-        let game = GameState::new();
-        let map_data = game.map.to_bytes();
+    fn new(maps_dir: PathBuf) -> Self {
+        let map_index = load_map_index(&maps_dir);
         Room {
-            game,
+            game: None,
             players: HashMap::new(),
-            next_id: 0,
-            map_data,
+            map_data: Vec::new(),
+            map_index,
+            maps_dir,
+            current_map_id: String::new(),
         }
     }
 
-    fn add_player(&mut self, tx: mpsc::UnboundedSender<ServerMsg>) -> Option<(usize, ServerMsg)> {
-        if self.next_id >= MAX_PLAYERS {
-            return None;
+    fn load_map(&mut self, map_id: &str) {
+        let map_path = self.maps_dir.join(format!("{map_id}.png"));
+        let map = if map_path.exists() {
+            load_map_from_png(&map_path)
+        } else {
+            Map::with_obstacles(MAP_WIDTH, MAP_HEIGHT)
+        };
+
+        println!(
+            "Loaded map: {} ({}x{}, {} passable)",
+            map_id,
+            map.width,
+            map.height,
+            map.passable_count()
+        );
+
+        self.map_data = map
+            .passable
+            .iter()
+            .map(|&p| if p { 0u8 } else { 1u8 })
+            .collect();
+        self.current_map_id = map_id.to_string();
+        let mut game = GameState::new(map);
+
+        // Add all current players
+        let mut ids: Vec<usize> = self.players.keys().cloned().collect();
+        ids.sort();
+        for id in ids {
+            game.add_player(id);
         }
-        let id = self.next_id;
-        self.next_id += 1;
 
-        self.game.add_player(id);
+        self.game = Some(game);
+    }
 
-        let welcome = ServerMsg::Welcome {
-            player_id: id,
-            map_width: MAP_WIDTH,
-            map_height: MAP_HEIGHT,
-            map_data: self.map_data.clone(),
+    fn add_player(&mut self, tx: mpsc::UnboundedSender<ServerMsg>) -> Option<(usize, ServerMsg)> {
+        // Find first available ID
+        let id = (0..MAX_PLAYERS).find(|i| !self.players.contains_key(i));
+        let id = match id {
+            Some(id) => id,
+            None => return None,
         };
 
         self.players.insert(
@@ -104,7 +189,26 @@ impl Room {
             },
         );
 
-        Some((id, welcome))
+        // If game is running, add player to it
+        if let Some(ref mut game) = self.game {
+            game.add_player(id);
+
+            let welcome = ServerMsg::Welcome {
+                player_id: id,
+                map_width: game.map_width(),
+                map_height: game.map_height(),
+                map_data: self.map_data.clone(),
+                map_id: self.current_map_id.clone(),
+            };
+
+            Some((id, welcome))
+        } else {
+            // No game yet — send map list so client can choose
+            let msg = ServerMsg::MapList {
+                maps: self.map_index.clone(),
+            };
+            Some((id, msg))
+        }
     }
 
     fn remove_player(&mut self, id: usize) {
@@ -115,32 +219,54 @@ impl Room {
         }
     }
 
-    fn set_cursor(&mut self, player_id: usize, x: u32, y: u32) {
-        self.game.set_cursor(player_id, x, y);
+    fn start_game(&mut self, map_id: &str) {
+        self.load_map(map_id);
+
+        // Send welcome to all players
+        if let Some(ref game) = self.game {
+            for (id, slot) in &self.players {
+                let welcome = ServerMsg::Welcome {
+                    player_id: *id,
+                    map_width: game.map_width(),
+                    map_height: game.map_height(),
+                    map_data: self.map_data.clone(),
+                    map_id: self.current_map_id.clone(),
+                };
+                let _ = slot.tx.send(welcome);
+            }
+        }
+    }
+
+    fn set_cursor(&mut self, player_id: usize, x: i32, y: i32) {
+        if let Some(ref mut game) = self.game {
+            game.set_cursor(player_id, x, y);
+        }
     }
 
     fn tick(&mut self) {
-        self.game.tick();
+        if let Some(ref mut game) = self.game {
+            game.tick();
 
-        let bitmap = self.game.get_bitmap();
-        let bitmap_b64 = base64::engine::general_purpose::STANDARD.encode(&bitmap);
-        let scores = self.game.get_scores();
-        let cursor_data = self.game.get_cursors();
+            let bitmap = game.get_bitmap();
+            let bitmap_b64 = base64::engine::general_purpose::STANDARD.encode(&bitmap);
+            let scores = game.get_scores();
+            let cursor_data = game.get_cursors();
 
-        let cursors: Vec<Option<(u32, u32)>> = cursor_data
-            .iter()
-            .map(|(x, y, active)| if *active { Some((*x, *y)) } else { None })
-            .collect();
+            let cursors: Vec<Option<(i32, i32)>> = cursor_data
+                .iter()
+                .map(|(x, y, active)| if *active { Some((*x, *y)) } else { None })
+                .collect();
 
-        let msg = ServerMsg::State {
-            tick: self.game.tick,
-            bitmap: bitmap_b64,
-            scores,
-            cursors,
-        };
+            let msg = ServerMsg::State {
+                tick: game.global_clock,
+                bitmap: bitmap_b64,
+                scores,
+                cursors,
+            };
 
-        for slot in self.players.values() {
-            let _ = slot.tx.send(msg.clone());
+            for slot in self.players.values() {
+                let _ = slot.tx.send(msg.clone());
+            }
         }
     }
 }
@@ -148,10 +274,19 @@ impl Room {
 #[tokio::main]
 async fn main() {
     let addr = "0.0.0.0:3001";
+    let maps_dir = PathBuf::from("public/maps");
+
+    let mut room = Room::new(maps_dir);
+
+    // If map specified on command line, start game immediately
+    if let Some(map_id) = std::env::args().nth(1) {
+        room.load_map(&map_id);
+    }
+
     let listener = TcpListener::bind(addr).await.expect("Failed to bind");
     println!("Liquid War server listening on ws://{addr}");
 
-    let room = Arc::new(Mutex::new(Room::new()));
+    let room = Arc::new(Mutex::new(room));
 
     // Game loop
     let room_tick = room.clone();
@@ -186,18 +321,16 @@ async fn main() {
             {
                 let mut room = room.lock().await;
                 match room.add_player(tx.clone()) {
-                    Some((id, welcome)) => {
+                    Some((id, msg)) => {
                         player_id = id;
-                        let msg = serde_json::to_string(&welcome).unwrap();
-                        if ws_tx.send(Message::Text(msg.into())).await.is_err() {
+                        let text = serde_json::to_string(&msg).unwrap();
+                        if ws_tx.send(Message::Text(text.into())).await.is_err() {
                             return;
                         }
                         println!("Player {id} connected from {addr}");
                     }
                     None => {
-                        let _ = ws_tx
-                            .send(Message::Close(None))
-                            .await;
+                        let _ = ws_tx.send(Message::Close(None)).await;
                         return;
                     }
                 }
@@ -235,6 +368,18 @@ async fn main() {
                             }
                             ClientMsg::Cursor { x, y } => {
                                 room.set_cursor(player_id, x, y);
+                            }
+                            ClientMsg::SelectMap { id } => {
+                                // Player 0 (host) can select map
+                                if player_id == 0 {
+                                    room.start_game(&id);
+                                }
+                            }
+                            ClientMsg::StartGame => {
+                                if player_id == 0 && room.game.is_none() {
+                                    // Default map if none selected
+                                    room.start_game("rect");
+                                }
                             }
                         }
                     }

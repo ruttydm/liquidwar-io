@@ -1,0 +1,610 @@
+[
+  {
+    "id": "007",
+    "name": "Bond, James Bond"
+  },
+  {
+    "id": "213",
+    "name": "Mathematics are easy"
+  },
+  {
+    "id": "2d",
+    "name": "Kasper - 2d"
+  },
+  {
+    "id": "3d",
+    "name": "Kasper - 3d"
+  },
+  {
+    "id": "3x3",
+    "name": "Kasper - Tick Tack Toe"
+  },
+  {
+    "id": "4zones",
+    "name": "4 zones"
+  },
+  {
+    "id": "666",
+    "name": "Whose number is that?"
+  },
+  {
+    "id": "8",
+    "name": "Jan - Eight houses"
+  },
+  {
+    "id": "ac",
+    "name": "Kasper - Ac"
+  },
+  {
+    "id": "alstar1",
+    "name": "Alstar - Alstar's map"
+  },
+  {
+    "id": "anaglyph1",
+    "name": "Kasper - Anaglyph 1"
+  },
+  {
+    "id": "anaglyph2",
+    "name": "Kasper - Anaglyph 2"
+  },
+  {
+    "id": "aquarium",
+    "name": "Aquarium"
+  },
+  {
+    "id": "around",
+    "name": "Kasper - Around"
+  },
+  {
+    "id": "bestiole",
+    "name": "Happy spider"
+  },
+  {
+    "id": "biere",
+    "name": "Serieux destroy!"
+  },
+  {
+    "id": "big",
+    "name": "Kasper - Big 1"
+  },
+  {
+    "id": "blemmya",
+    "name": "Kasper - Blemmya"
+  },
+  {
+    "id": "boa",
+    "name": "An elephant inside a boa"
+  },
+  {
+    "id": "bonoball",
+    "name": "Ballons"
+  },
+  {
+    "id": "bored",
+    "name": "Kasper - Labyrinth 1"
+  },
+  {
+    "id": "bubbles",
+    "name": "Jan - Bubbles"
+  },
+  {
+    "id": "card",
+    "name": "Kasper - card"
+  },
+  {
+    "id": "carreaux",
+    "name": "Squarish stuff"
+  },
+  {
+    "id": "carres",
+    "name": "Random rectangles"
+  },
+  {
+    "id": "centrik",
+    "name": "You are sleeping"
+  },
+  {
+    "id": "charming",
+    "name": "Kasper - Anaglyph 2 (charming)"
+  },
+  {
+    "id": "chenille",
+    "name": "Slow slow..."
+  },
+  {
+    "id": "chess",
+    "name": "Kasper - Chess"
+  },
+  {
+    "id": "chinois",
+    "name": "Ping"
+  },
+  {
+    "id": "circle",
+    "name": "Kasper - Circle"
+  },
+  {
+    "id": "circlus",
+    "name": "Kasper - Space 1"
+  },
+  {
+    "id": "clean",
+    "name": "Kasper - Green"
+  },
+  {
+    "id": "clown",
+    "name": "Clown"
+  },
+  {
+    "id": "coccinel",
+    "name": "Nice bug"
+  },
+  {
+    "id": "coeurs",
+    "name": "Mmmmmmmmm"
+  },
+  {
+    "id": "confuse",
+    "name": "Kasper - confuse"
+  },
+  {
+    "id": "cornet3b",
+    "name": "Sluuuuurp"
+  },
+  {
+    "id": "crown",
+    "name": "Crown"
+  },
+  {
+    "id": "darkone1",
+    "name": "Jan - Dark One 1"
+  },
+  {
+    "id": "darkone2",
+    "name": "Jan - Dark One 2"
+  },
+  {
+    "id": "darkone3",
+    "name": "Jan - Dark One 3"
+  },
+  {
+    "id": "darkone4",
+    "name": "Jan - Dark One 4"
+  },
+  {
+    "id": "derivsol",
+    "name": "Sailing"
+  },
+  {
+    "id": "dirt",
+    "name": "Kasper - Labyrinth 2"
+  },
+  {
+    "id": "donuts",
+    "name": "Five donuts"
+  },
+  {
+    "id": "echange",
+    "name": "Highway"
+  },
+  {
+    "id": "echlune",
+    "name": "Climb and grab it"
+  },
+  {
+    "id": "egg",
+    "name": "Kasper - Egg"
+  },
+  {
+    "id": "etoile",
+    "name": "Star"
+  },
+  {
+    "id": "eyes",
+    "name": "Kasper - Eyes"
+  },
+  {
+    "id": "feuille",
+    "name": "Leaf"
+  },
+  {
+    "id": "fille",
+    "name": "Girl"
+  },
+  {
+    "id": "fils",
+    "name": "Emberlificoted"
+  },
+  {
+    "id": "flo1",
+    "name": "Florence's map"
+  },
+  {
+    "id": "garcon",
+    "name": "Boy"
+  },
+  {
+    "id": "garden",
+    "name": "Kasper - Labyrinth 3"
+  },
+  {
+    "id": "glasses",
+    "name": "Glasses"
+  },
+  {
+    "id": "h",
+    "name": "Jan - The great H"
+  },
+  {
+    "id": "haricot",
+    "name": "Bean"
+  },
+  {
+    "id": "hi",
+    "name": "Jan - Fight in the middle"
+  },
+  {
+    "id": "honey",
+    "name": "Kasper - Honey"
+  },
+  {
+    "id": "honeymoon",
+    "name": "Kasper - Honeymoon"
+  },
+  {
+    "id": "jabberwocky",
+    "name": "Kasper - jabberwocky"
+  },
+  {
+    "id": "labyrint",
+    "name": "Kasper - Labyrinth 4"
+  },
+  {
+    "id": "lapin",
+    "name": "What's up doc?"
+  },
+  {
+    "id": "liqwar",
+    "name": "What's the name of the game?"
+  },
+  {
+    "id": "logo",
+    "name": "Kasper - Logo"
+  },
+  {
+    "id": "lost",
+    "name": "Kasper - Lost"
+  },
+  {
+    "id": "lw",
+    "name": "Kasper - Logo 2"
+  },
+  {
+    "id": "lwtab002",
+    "name": "LW3 - Small rectangles"
+  },
+  {
+    "id": "lwtab003",
+    "name": "LW3 - Random islands"
+  },
+  {
+    "id": "lwtab004",
+    "name": "LW3 - Circles and pipes"
+  },
+  {
+    "id": "lwtab005",
+    "name": "LW3 - Puzzle"
+  },
+  {
+    "id": "lwtab006",
+    "name": "LW3 - Puzzle for kids"
+  },
+  {
+    "id": "lwtab008",
+    "name": "LW3 - Symetric walls (half)"
+  },
+  {
+    "id": "lwtab009",
+    "name": "LW3 - Symetric walls (double)"
+  },
+  {
+    "id": "lwtabbar",
+    "name": "LW3 - Weird walls"
+  },
+  {
+    "id": "lwtabdrt",
+    "name": "LW3 - Geometric"
+  },
+  {
+    "id": "lwtabgen",
+    "name": "*The NEW* genuine LW map"
+  },
+  {
+    "id": "lwtabmic",
+    "name": "LW3 - Foo Bar Mouse"
+  },
+  {
+    "id": "lwtabrec",
+    "name": "LW3 - Thin walls"
+  },
+  {
+    "id": "lwtabses",
+    "name": "LW3 - S like snake"
+  },
+  {
+    "id": "lwtabto2",
+    "name": "LW3 - Circles"
+  },
+  {
+    "id": "lwtabto4",
+    "name": "LW3 - Bricks"
+  },
+  {
+    "id": "lwtabtom",
+    "name": "LW3 - The old genuine LW map"
+  },
+  {
+    "id": "lwtabtru",
+    "name": "LW3 - Dots and curves"
+  },
+  {
+    "id": "lwtabvid",
+    "name": "LW3 - Empty"
+  },
+  {
+    "id": "marionet",
+    "name": "Run, run!"
+  },
+  {
+    "id": "metation",
+    "name": "Kasper - Carpe Diem"
+  },
+  {
+    "id": "mouse1",
+    "name": "Mouse - 1"
+  },
+  {
+    "id": "muehle",
+    "name": "Jan - Aim at it"
+  },
+  {
+    "id": "musique",
+    "name": "Music"
+  },
+  {
+    "id": "net1",
+    "name": "Complex"
+  },
+  {
+    "id": "net2",
+    "name": "Pools and pipes"
+  },
+  {
+    "id": "ordino",
+    "name": "Computer"
+  },
+  {
+    "id": "paper",
+    "name": "Kasper - Big 2"
+  },
+  {
+    "id": "papercut",
+    "name": "Kasper - Papercut"
+  },
+  {
+    "id": "papillon",
+    "name": "Butterfly"
+  },
+  {
+    "id": "pastel",
+    "name": "Kasper - Pastel"
+  },
+  {
+    "id": "penta",
+    "name": "Pentaminos"
+  },
+  {
+    "id": "peur",
+    "name": "Scared"
+  },
+  {
+    "id": "pieuvre",
+    "name": "Tentacles"
+  },
+  {
+    "id": "pigface",
+    "name": "Pig face"
+  },
+  {
+    "id": "place",
+    "name": "Kasper - Retro"
+  },
+  {
+    "id": "platform",
+    "name": "Platforms"
+  },
+  {
+    "id": "poisson",
+    "name": "Fish"
+  },
+  {
+    "id": "policier",
+    "name": "Triiiiiit"
+  },
+  {
+    "id": "portable",
+    "name": "Allo"
+  },
+  {
+    "id": "psyforcegeometry",
+    "name": "Psyforce Geometry"
+  },
+  {
+    "id": "psyforcemultiroom",
+    "name": "Pysforce Multiroom"
+  },
+  {
+    "id": "psyforcespheralcube",
+    "name": "Psyforce Spheral Cube"
+  },
+  {
+    "id": "psyforcesquares",
+    "name": "Psyforce Squares"
+  },
+  {
+    "id": "psyforceultramultiroom",
+    "name": "Psyforce Ultra Multiroom"
+  },
+  {
+    "id": "puckman",
+    "name": "Kasper - Puckman"
+  },
+  {
+    "id": "quaders",
+    "name": "Jan - Quaders"
+  },
+  {
+    "id": "rect",
+    "name": "Kasper - Rectangle 1"
+  },
+  {
+    "id": "rectangle",
+    "name": "Kasper - Rectangle 2"
+  },
+  {
+    "id": "rene02",
+    "name": "Rene - 02"
+  },
+  {
+    "id": "rene03",
+    "name": "Rene - 03"
+  },
+  {
+    "id": "rene04",
+    "name": "Rene - 04"
+  },
+  {
+    "id": "rolz",
+    "name": "Jan - Railroad"
+  },
+  {
+    "id": "rough",
+    "name": "Kasper - Rough"
+  },
+  {
+    "id": "sgdb",
+    "name": "91700 SGDB"
+  },
+  {
+    "id": "skull",
+    "name": "Kasper - Skull 1"
+  },
+  {
+    "id": "skullbig",
+    "name": "Kasper - Skull 2"
+  },
+  {
+    "id": "slimy",
+    "name": "Kasper - Slimy"
+  },
+  {
+    "id": "smile",
+    "name": "Kasper - Smile"
+  },
+  {
+    "id": "sol",
+    "name": "G"
+  },
+  {
+    "id": "solsystembyn",
+    "name": "Solsystem by N"
+  },
+  {
+    "id": "sonnesystem",
+    "name": "Solar System"
+  },
+  {
+    "id": "spagueti",
+    "name": "Bolognese"
+  },
+  {
+    "id": "strike",
+    "name": "Strike"
+  },
+  {
+    "id": "tag",
+    "name": "Jan - Three blocks"
+  },
+  {
+    "id": "tiles",
+    "name": "Kasper - Space 2"
+  },
+  {
+    "id": "tilt",
+    "name": "Tilt"
+  },
+  {
+    "id": "tipi",
+    "name": "Tipi"
+  },
+  {
+    "id": "titanic",
+    "name": "Titanic"
+  },
+  {
+    "id": "trumpet",
+    "name": "Trumpet"
+  },
+  {
+    "id": "tulipes",
+    "name": "Tulips"
+  },
+  {
+    "id": "tuyaux",
+    "name": "Pipes"
+  },
+  {
+    "id": "underground",
+    "name": "Kasper - Underground"
+  },
+  {
+    "id": "velo",
+    "name": "Bike"
+  },
+  {
+    "id": "village",
+    "name": "Village"
+  },
+  {
+    "id": "void",
+    "name": "Void"
+  },
+  {
+    "id": "volet",
+    "name": "Window"
+  },
+  {
+    "id": "watch",
+    "name": "Kasper - Watch"
+  },
+  {
+    "id": "world1",
+    "name": "World 1"
+  },
+  {
+    "id": "world2",
+    "name": "World 2"
+  },
+  {
+    "id": "world3",
+    "name": "World 3"
+  },
+  {
+    "id": "world4",
+    "name": "World 4"
+  },
+  {
+    "id": "z",
+    "name": "Z"
+  }
+]
