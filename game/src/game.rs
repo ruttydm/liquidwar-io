@@ -19,6 +19,7 @@ pub struct GameState {
     pub fighter_defense: u32,
     pub fighter_new_health: u32,
     pub number_influence: i32,
+    pub cursor_speed: i32,
 }
 
 impl GameState {
@@ -66,6 +67,7 @@ impl GameState {
             fighter_defense: DEFAULT_FIGHTER_DEFENSE,
             fighter_new_health: DEFAULT_FIGHTER_NEW_HEALTH,
             number_influence: DEFAULT_NUMBER_INFLUENCE,
+            cursor_speed: 1,
         }
     }
 
@@ -228,6 +230,40 @@ impl GameState {
         (x, y)
     }
 
+    /// Set cursor key state bitmask (1=up, 2=right, 4=down, 8=left).
+    pub fn set_key_state(&mut self, player_id: usize, key_state: u8) {
+        if player_id < NB_TEAMS && self.cursors[player_id].active {
+            self.cursors[player_id].key_state = key_state;
+        }
+    }
+
+    /// Move cursor based on key_state bitmask, matching LW5 move_cursor.
+    /// Called once per tick per active cursor.
+    fn move_cursor_by_keys(&mut self, player_id: usize) {
+        if player_id >= NB_TEAMS || !self.cursors[player_id].active {
+            return;
+        }
+        let keys = self.cursors[player_id].key_state;
+        if keys == 0 {
+            return;
+        }
+
+        let w = self.map.width as i32;
+        let h = self.map.height as i32;
+        let speed = self.cursor_speed;
+
+        let mut dx: i32 = 0;
+        let mut dy: i32 = 0;
+        if keys & CURSOR_KEY_UP != 0 { dy -= speed; }
+        if keys & CURSOR_KEY_DOWN != 0 { dy += speed; }
+        if keys & CURSOR_KEY_LEFT != 0 { dx -= speed; }
+        if keys & CURSOR_KEY_RIGHT != 0 { dx += speed; }
+
+        let new_x = (self.cursors[player_id].x + dx).clamp(1, w - 2);
+        let new_y = (self.cursors[player_id].y + dy).clamp(1, h - 2);
+        self.set_cursor(player_id, new_x, new_y);
+    }
+
     /// Set cursor position directly (for server-mode: client sends absolute position).
     pub fn set_cursor(&mut self, player_id: usize, x: i32, y: i32) {
         if player_id < NB_TEAMS && self.cursors[player_id].active {
@@ -269,7 +305,10 @@ impl GameState {
 
     /// One game tick (matching LW5 logic() exactly).
     pub fn tick(&mut self) {
-        // Step 1: move_all_cursors — handled externally via set_cursor()
+        // Step 1: move_all_cursors based on key_state
+        for i in 0..NB_TEAMS {
+            self.move_cursor_by_keys(i);
+        }
 
         // Step 2: apply_all_cursor — poke cursor values into mesh
         self.apply_all_cursors();

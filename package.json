@@ -21,5 +21,8 @@
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.5.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "midi-player-js": "^2.0.16",
+    "soundfont-player": "^0.12.0"
+  }
 }

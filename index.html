@@ -4,92 +4,150 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Liquid War</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body {
         overflow: hidden;
-        background: #0a0a1a;
+        background: #000020;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         height: 100vh;
-        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-family: 'Press Start 2P', monospace;
         color: #e0e0e0;
+        font-size: 11px;
       }
-      canvas {
-        display: block;
-        cursor: none;
-      }
+      canvas { display: block; cursor: none; }
+      canvas.hidden { display: none; }
+
+      /* Scoreboard */
       #scoreboard {
         position: fixed;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
+        top: 8px;
+        right: 8px;
         color: white;
-        font-family: monospace;
-        font-size: 14px;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 10px;
         background: rgba(0, 0, 0, 0.7);
-        padding: 6px 16px;
+        padding: 6px 12px;
         border-radius: 4px;
         z-index: 10;
       }
+      #scoreboard.hidden { display: none; }
 
-      /* Map selection overlay */
-      #lobby {
+      /* Menu root */
+      #menu-root {
         position: fixed;
         inset: 0;
-        background: #0a0a1a;
+        background: url('/assets/lw5back.png') center center / cover no-repeat;
+        background-color: #000020;
         z-index: 100;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        overflow-y: auto;
+        justify-content: center;
       }
-      #lobby.hidden { display: none; }
-      #lobby h1 {
-        font-size: 2.5rem;
-        margin: 30px 0 8px;
-        color: #4287f5;
-        letter-spacing: 2px;
+      #menu-root.hidden { display: none; }
+
+      .menu-screen { display: flex; flex-direction: column; align-items: center; }
+      .menu-screen.hidden { display: none; }
+
+      /* Main menu */
+      #menu-main h1 {
+        font-size: 24px;
+        color: #6ab0ff;
+        margin-bottom: 8px;
+        text-shadow: 2px 2px 0 #000040;
+        letter-spacing: 4px;
       }
-      #lobby .subtitle {
+      #menu-main .subtitle {
+        color: #667;
+        font-size: 8px;
+        margin-bottom: 30px;
+      }
+      .menu-btn {
+        display: block;
+        width: 200px;
+        padding: 10px;
+        margin: 4px;
+        background: rgba(0, 0, 40, 0.85);
+        border: 2px solid #334;
+        color: #ccc;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 11px;
+        cursor: pointer;
+        text-align: center;
+        text-transform: uppercase;
+        transition: border-color 0.1s, color 0.1s, background 0.1s;
+      }
+      .menu-btn:hover {
+        border-color: #4287f5;
+        color: #fff;
+        background: rgba(30, 40, 80, 0.9);
+      }
+      .menu-btn.primary {
+        border-color: #4287f5;
+        color: #6ab0ff;
+      }
+      .menu-btn.primary:hover {
+        background: rgba(40, 60, 120, 0.9);
+        color: #fff;
+      }
+
+      .quick-btns {
+        position: fixed;
+        bottom: 12px;
+        right: 12px;
+        display: flex;
+        gap: 6px;
+        z-index: 101;
+      }
+      .quick-btn {
+        padding: 6px 12px;
+        background: rgba(0, 0, 30, 0.8);
+        border: 1px solid #334;
         color: #888;
-        margin-bottom: 20px;
-        font-size: 0.9rem;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        cursor: pointer;
       }
-      #lobby .search {
-        width: 320px;
-        padding: 8px 14px;
-        border-radius: 6px;
-        border: 1px solid #333;
-        background: #1a1a2e;
+      .quick-btn:hover { border-color: #4287f5; color: #ccc; }
+
+      /* Map selection */
+      #menu-map { width: 100%; max-width: 1000px; max-height: 100vh; overflow-y: auto; padding: 20px; }
+      #menu-map h2 { font-size: 14px; color: #6ab0ff; margin-bottom: 12px; text-shadow: 1px 1px 0 #000; }
+      .search {
+        width: 280px;
+        padding: 6px 10px;
+        border-radius: 4px;
+        border: 2px solid #334;
+        background: rgba(0, 0, 30, 0.9);
         color: #e0e0e0;
-        font-size: 1rem;
-        margin-bottom: 16px;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 9px;
+        margin-bottom: 12px;
         outline: none;
       }
-      #lobby .search:focus { border-color: #4287f5; }
+      .search:focus { border-color: #4287f5; }
       #map-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 12px;
-        padding: 0 30px 40px;
-        max-width: 1100px;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 8px;
         width: 100%;
+        max-height: 60vh;
+        overflow-y: auto;
+        padding: 4px;
       }
       .map-card {
-        background: #1a1a2e;
-        border: 2px solid #2a2a40;
-        border-radius: 8px;
+        background: rgba(0, 0, 30, 0.85);
+        border: 2px solid #223;
+        border-radius: 4px;
         cursor: pointer;
         overflow: hidden;
-        transition: border-color 0.15s, transform 0.1s;
+        transition: border-color 0.1s, transform 0.1s;
       }
-      .map-card:hover {
-        border-color: #4287f5;
-        transform: translateY(-2px);
-      }
+      .map-card:hover { border-color: #4287f5; transform: translateY(-2px); }
       .map-card img {
         width: 100%;
         aspect-ratio: 4/3;
@@ -99,24 +157,166 @@
         image-rendering: pixelated;
       }
       .map-card .label {
-        padding: 6px 8px;
-        font-size: 0.8rem;
+        padding: 4px 6px;
+        font-size: 7px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         text-align: center;
       }
+      .back-btn {
+        margin-top: 12px;
+        padding: 6px 16px;
+        background: rgba(0, 0, 30, 0.8);
+        border: 1px solid #334;
+        color: #888;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 9px;
+        cursor: pointer;
+      }
+      .back-btn:hover { border-color: #4287f5; color: #ccc; }
+
+      /* Teams */
+      #menu-teams { width: 100%; max-width: 600px; padding: 20px; }
+      #menu-teams h2 { font-size: 14px; color: #6ab0ff; margin-bottom: 16px; text-shadow: 1px 1px 0 #000; }
+      .team-slot {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+        padding: 6px 10px;
+        background: rgba(0, 0, 30, 0.7);
+        border: 1px solid #223;
+        border-radius: 4px;
+      }
+      .team-color {
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+        border: 1px solid #555;
+        flex-shrink: 0;
+      }
+      .team-slot select, .team-slot input {
+        background: rgba(0, 0, 20, 0.9);
+        border: 1px solid #334;
+        color: #ccc;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 8px;
+        padding: 4px 6px;
+      }
+      .team-slot input { width: 100px; }
+      .team-slot select { width: 70px; }
+
+      /* Options */
+      #menu-options { width: 100%; max-width: 400px; padding: 20px; }
+      #menu-options h2 { font-size: 14px; color: #6ab0ff; margin-bottom: 16px; text-shadow: 1px 1px 0 #000; }
+      .opt-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        color: #aaa;
+        font-size: 9px;
+      }
+      .opt-row input[type="range"] {
+        width: 120px;
+        accent-color: #4287f5;
+      }
+
+      /* About */
+      #menu-about { max-width: 500px; padding: 30px; text-align: center; }
+      #menu-about h2 { font-size: 14px; color: #6ab0ff; margin-bottom: 16px; }
+      #menu-about p { font-size: 8px; color: #888; line-height: 1.8; margin-bottom: 8px; }
+      #menu-about a { color: #4287f5; }
+
+      /* Game Over */
+      #game-over {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 20, 0.85);
+        z-index: 50;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Press Start 2P', monospace;
+      }
+      #game-over.hidden { display: none; }
+      #winner-text {
+        font-size: 28px;
+        text-shadow: 2px 2px 0 #000;
+        margin-bottom: 24px;
+      }
+      #return-to-menu {
+        padding: 10px 20px;
+        background: rgba(0, 0, 40, 0.9);
+        border: 2px solid #4287f5;
+        color: #6ab0ff;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 11px;
+        cursor: pointer;
+        text-transform: uppercase;
+      }
+      #return-to-menu:hover {
+        background: rgba(40, 60, 120, 0.9);
+        color: #fff;
+      }
     </style>
   </head>
   <body>
-    <div id="lobby">
-      <h1>LIQUID WAR</h1>
-      <p class="subtitle">Select a map to play</p>
-      <input class="search" type="text" placeholder="Search maps..." id="map-search" />
-      <div id="map-grid"></div>
+    <div id="menu-root">
+      <!-- Main Menu -->
+      <div id="menu-main" class="menu-screen">
+        <h1>LIQUID WAR</h1>
+        <p class="subtitle">Web port of Liquid War 5</p>
+        <button class="menu-btn primary" data-screen="map">Play</button>
+        <button class="menu-btn" data-screen="teams">Teams</button>
+        <button class="menu-btn" data-screen="options">Options</button>
+        <button class="menu-btn" data-screen="about">About</button>
+      </div>
+
+      <!-- Map Selection -->
+      <div id="menu-map" class="menu-screen hidden">
+        <h2>SELECT MAP</h2>
+        <input class="search" type="text" placeholder="Search maps..." id="map-search" />
+        <div id="map-grid"></div>
+        <button class="back-btn">Back</button>
+      </div>
+
+      <!-- Teams -->
+      <div id="menu-teams" class="menu-screen hidden">
+        <h2>TEAMS</h2>
+        <div id="team-slots"></div>
+        <button class="back-btn">Back</button>
+      </div>
+
+      <!-- Options -->
+      <div id="menu-options" class="menu-screen hidden">
+        <h2>OPTIONS</h2>
+        <div class="opt-row"><span>Cursor Speed</span><input type="range" min="1" max="5" value="1" id="opt-cursor-speed" /></div>
+        <div class="opt-row"><span>Music Volume</span><input type="range" min="0" max="100" value="50" id="opt-music-vol" /></div>
+        <div class="opt-row"><span>SFX Volume</span><input type="range" min="0" max="100" value="60" id="opt-sfx-vol" /></div>
+        <div class="opt-row"><span>Water Volume</span><input type="range" min="0" max="100" value="30" id="opt-water-vol" /></div>
+        <button class="back-btn">Back</button>
+      </div>
+
+      <!-- About -->
+      <div id="menu-about" class="menu-screen hidden">
+        <h2>ABOUT</h2>
+        <p>Liquid War 5 — Web Port</p>
+        <p>Original game by Thomas Colcombet</p>
+        <p>Licensed under GNU GPL v2</p>
+        <p><a href="https://www.gnu.org/copyleft/gpl.html">www.gnu.org/copyleft/gpl.html</a></p>
+        <button class="back-btn">Back</button>
+      </div>
     </div>
-    <div id="scoreboard"></div>
-    <canvas id="game"></canvas>
+
+    <div id="game-over" class="hidden">
+      <div id="winner-text"></div>
+      <button id="return-to-menu">Return to Menu</button>
+    </div>
+    <div id="scoreboard" class="hidden"></div>
+    <canvas id="game" class="hidden"></canvas>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

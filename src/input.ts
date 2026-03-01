@@ -1,49 +1,80 @@
+export const KEY_UP = 1;
+export const KEY_RIGHT = 2;
+export const KEY_DOWN = 4;
+export const KEY_LEFT = 8;
+
+const DEFAULT_BINDINGS: Record<string, number> = {
+  ArrowUp: KEY_UP,
+  ArrowDown: KEY_DOWN,
+  ArrowLeft: KEY_LEFT,
+  ArrowRight: KEY_RIGHT,
+};
+
 export class InputHandler {
-  public cursorX = 0;
-  public cursorY = 0;
-  private scale: number;
+  public keyState = 0;
+  private bindings: Record<string, number>;
+  private kbBits = 0;
+  private mouseBits = 0;
+  private mouseActive = false;
+  private mouseAnchorX = 0;
+  private mouseAnchorY = 0;
+  private static readonly MOUSE_GAP = 18;
 
-  constructor(
-    private canvas: HTMLCanvasElement,
-    private mapWidth: number,
-    private mapHeight: number,
-  ) {
-    this.scale = Math.min(canvas.width / mapWidth, canvas.height / mapHeight);
+  constructor(canvas: HTMLCanvasElement) {
+    this.bindings = { ...DEFAULT_BINDINGS };
 
-    canvas.addEventListener("mousemove", (e) =>
-      this.handleMove(e.offsetX, e.offsetY),
-    );
+    document.addEventListener("keydown", (e) => this.onKeyDown(e));
+    document.addEventListener("keyup", (e) => this.onKeyUp(e));
 
-    canvas.addEventListener(
-      "touchmove",
-      (e) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const rect = canvas.getBoundingClientRect();
-        this.handleMove(touch.clientX - rect.left, touch.clientY - rect.top);
-      },
-      { passive: false },
-    );
+    // LW5-style mouse gap mode: hold click, move away from anchor to steer
+    canvas.addEventListener("mousedown", (e) => {
+      this.mouseActive = true;
+      this.mouseAnchorX = e.clientX;
+      this.mouseAnchorY = e.clientY;
+      this.mouseBits = 0;
+      this.updateState();
+    });
+    document.addEventListener("mouseup", () => {
+      this.mouseActive = false;
+      this.mouseBits = 0;
+      this.updateState();
+    });
+    document.addEventListener("mousemove", (e) => {
+      if (!this.mouseActive) return;
+      const dx = e.clientX - this.mouseAnchorX;
+      const dy = e.clientY - this.mouseAnchorY;
+      this.mouseBits = 0;
+      if (dy < -InputHandler.MOUSE_GAP) this.mouseBits |= KEY_UP;
+      if (dy > InputHandler.MOUSE_GAP) this.mouseBits |= KEY_DOWN;
+      if (dx < -InputHandler.MOUSE_GAP) this.mouseBits |= KEY_LEFT;
+      if (dx > InputHandler.MOUSE_GAP) this.mouseBits |= KEY_RIGHT;
+      this.updateState();
+    });
   }
 
-  updateScale() {
-    this.scale = Math.min(
-      this.canvas.width / this.mapWidth,
-      this.canvas.height / this.mapHeight,
-    );
+  private onKeyDown(e: KeyboardEvent) {
+    const bit = this.bindings[e.code] ?? this.bindings[e.key];
+    if (bit !== undefined) {
+      e.preventDefault();
+      this.kbBits |= bit;
+      this.updateState();
+    }
   }
 
-  private handleMove(pixelX: number, pixelY: number) {
-    // Account for CSS scaling
-    const rect = this.canvas.getBoundingClientRect();
-    const scaleX = this.canvas.width / rect.width;
-    const scaleY = this.canvas.height / rect.height;
-    pixelX *= scaleX;
-    pixelY *= scaleY;
+  private onKeyUp(e: KeyboardEvent) {
+    const bit = this.bindings[e.code] ?? this.bindings[e.key];
+    if (bit !== undefined) {
+      e.preventDefault();
+      this.kbBits &= ~bit;
+      this.updateState();
+    }
+  }
 
-    this.cursorX = Math.floor(pixelX / this.scale);
-    this.cursorY = Math.floor(pixelY / this.scale);
-    this.cursorX = Math.max(0, Math.min(this.mapWidth - 1, this.cursorX));
-    this.cursorY = Math.max(0, Math.min(this.mapHeight - 1, this.cursorY));
+  private updateState() {
+    this.keyState = this.kbBits | this.mouseBits;
+  }
+
+  setBindings(bindings: Record<string, number>) {
+    this.bindings = bindings;
   }
 }

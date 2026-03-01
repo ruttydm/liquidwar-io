@@ -60,12 +60,24 @@ fn load_map_index(maps_dir: &Path) -> Vec<MapInfo> {
 }
 
 #[derive(Deserialize)]
+struct TeamSlotConfig {
+    mode: String,
+    name: String,
+}
+
+#[derive(Deserialize)]
 #[serde(tag = "type")]
 enum ClientMsg {
     #[serde(rename = "join")]
     Join { name: String },
     #[serde(rename = "cursor")]
     Cursor { x: i32, y: i32 },
+    #[serde(rename = "key_state")]
+    KeyState { keys: u8 },
+    #[serde(rename = "cursor_speed")]
+    CursorSpeed { speed: u8 },
+    #[serde(rename = "team_config")]
+    TeamConfig { teams: Vec<TeamSlotConfig> },
     #[serde(rename = "select_map")]
     SelectMap { id: String },
     #[serde(rename = "start_game")]
@@ -123,6 +135,8 @@ struct Room {
     map_index: Vec<MapInfo>,
     maps_dir: PathBuf,
     current_map_id: String,
+    team_config: Vec<TeamSlotConfig>,
+    cpu_teams: Vec<usize>,
 }
 
 impl Room {
@@ -135,6 +149,8 @@ impl Room {
             map_index,
             maps_dir,
             current_map_id: String::new(),
+            team_config: Vec::new(),
+            cpu_teams: Vec::new(),
         }
     }
 
@@ -220,7 +236,60 @@ impl Room {
     }
 
     fn start_game(&mut self, map_id: &str) {
-        self.load_map(map_id);
+        // Load the map
+        let map_path = self.maps_dir.join(format!("{map_id}.png"));
+        let map = if map_path.exists() {
+            load_map_from_png(&map_path)
+        } else {
+            Map::with_obstacles(MAP_WIDTH, MAP_HEIGHT)
+        };
+
+        println!(
+            "Starting game on map: {} ({}x{}, {} passable)",
+            map_id,
+            map.width,
+            map.height,
+            map.passable_count()
+        );
+
+        self.map_data = map
+            .passable
+            .iter()
+            .map(|&p| if p { 0u8 } else { 1u8 })
+            .collect();
+        self.current_map_id = map_id.to_string();
+        let mut game = GameState::new(map);
+
+        // Determine which teams to add based on team config
+        self.cpu_teams.clear();
+        if !self.team_config.is_empty() {
+            for (i, tc) in self.team_config.iter().enumerate() {
+                if i >= NB_TEAMS { break; }
+                match tc.mode.as_str() {
+                    "human" => { game.add_player(i); }
+                    "cpu" => {
+                        game.add_player(i);
+                        self.cpu_teams.push(i);
+                    }
+                    _ => {} // "off"
+                }
+            }
+        } else {
+            // Default: add all connected players + 1 CPU opponent
+            let mut ids: Vec<usize> = self.players.keys().cloned().collect();
+            ids.sort();
+            for id in &ids {
+                game.add_player(*id);
+            }
+            // Add CPU as team after last human
+            let cpu_team = ids.last().map(|&id| id + 1).unwrap_or(1);
+            if cpu_team < NB_TEAMS {
+                game.add_player(cpu_team);
+                self.cpu_teams.push(cpu_team);
+            }
+        }
+
+        self.game = Some(game);
 
         // Send welcome to all players
         if let Some(ref game) = self.game {
@@ -237,14 +306,36 @@ impl Room {
         }
     }
 
+    fn set_cursor_speed(&mut self, speed: u8) {
+        if let Some(ref mut game) = self.game {
+            game.cursor_speed = speed.clamp(1, 5) as i32;
+        }
+    }
+
     fn set_cursor(&mut self, player_id: usize, x: i32, y: i32) {
         if let Some(ref mut game) = self.game {
             game.set_cursor(player_id, x, y);
         }
     }
 
+    fn set_key_state(&mut self, player_id: usize, keys: u8) {
+        if let Some(ref mut game) = self.game {
+            game.set_key_state(player_id, keys);
+        }
+    }
+
     fn tick(&mut self) {
         if let Some(ref mut game) = self.game {
+            // Simple CPU AI: change direction randomly every ~20 ticks
+            for &cpu_team in &self.cpu_teams {
+                if game.global_clock % 20 == (cpu_team as i32 * 7) % 20 {
+                    // Pick a random direction (1=up, 2=right, 4=down, 8=left, or combos)
+                    let directions: [u8; 8] = [1, 2, 4, 8, 3, 6, 9, 12];
+                    let idx = ((game.global_clock as usize).wrapping_mul(cpu_team + 1).wrapping_add(cpu_team * 37)) % directions.len();
+                    game.set_key_state(cpu_team, directions[idx]);
+                }
+            }
+
             game.tick();
 
             let bitmap = game.get_bitmap();
@@ -368,6 +459,19 @@ async fn main() {
                             }
                             ClientMsg::Cursor { x, y } => {
                                 room.set_cursor(player_id, x, y);
+                            }
+                            ClientMsg::KeyState { keys } => {
+                                room.set_key_state(player_id, keys);
+                            }
+                            ClientMsg::CursorSpeed { speed } => {
+                                if player_id == 0 {
+                                    room.set_cursor_speed(speed);
+                                }
+                            }
+                            ClientMsg::TeamConfig { teams } => {
+                                if player_id == 0 {
+                                    room.team_config = teams;
+                                }
                             }
                             ClientMsg::SelectMap { id } => {
                                 // Player 0 (host) can select map

@@ -48,6 +48,8 @@ export class GameClient {
   public onMapList: ((msg: MapListMsg) => void) | null = null;
   public onWelcome: ((msg: WelcomeMsg) => void) | null = null;
   public onState: ((msg: StateMsg) => void) | null = null;
+  public onPlayerJoined: ((msg: PlayerJoinedMsg) => void) | null = null;
+  public onPlayerLeft: ((msg: PlayerLeftMsg) => void) | null = null;
   public onOpen: (() => void) | null = null;
 
   constructor(url: string) {
@@ -69,6 +71,12 @@ export class GameClient {
         case "state":
           this.onState?.(msg);
           break;
+        case "player_joined":
+          this.onPlayerJoined?.(msg);
+          break;
+        case "player_left":
+          this.onPlayerLeft?.(msg);
+          break;
       }
     };
   }
@@ -79,6 +87,18 @@ export class GameClient {
 
   sendCursor(x: number, y: number) {
     this.send({ type: "cursor", x: Math.round(x), y: Math.round(y) });
+  }
+
+  sendKeyState(keys: number) {
+    this.send({ type: "key_state", keys });
+  }
+
+  sendCursorSpeed(speed: number) {
+    this.send({ type: "cursor_speed", speed });
+  }
+
+  sendTeamConfig(teams: Array<{ mode: string; name: string }>) {
+    this.send({ type: "team_config", teams });
   }
 
   sendSelectMap(id: string) {
