@@ -35,6 +35,7 @@ pub fn Nav() -> impl IntoView {
             </ul>
             <div class="sidebar-footer">
                 <a href="/" class="play-link">"Play Game"</a>
+                <a href="https://github.com/ruttydm/liquidwar-io" target="_blank" rel="noopener" class="github-link">"GitHub"</a>
             </div>
         </nav>
         <div class="nav-overlay" class:open=move || open.get()
